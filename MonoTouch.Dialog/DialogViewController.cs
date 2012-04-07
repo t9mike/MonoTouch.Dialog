@@ -342,7 +342,9 @@ namespace MonoTouch.Dialog
 			
 			public override void WillDisplay (UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
 			{
-				if (Root.NeedColorUpdate){
+				// mmuegel: Root.NeedColorUpdate was not true even though set elsewhere; must be two roots and a bug
+				// in how I am using this?
+				if (true||Root.NeedColorUpdate){
 					var section = Root.Sections [indexPath.Section];
 					var element = section.Elements [indexPath.Row];
 					var colorized = element as IColorizeBackground;
@@ -395,6 +397,10 @@ namespace MonoTouch.Dialog
 			#region Pull to Refresh support
 			public override void Scrolled (UIScrollView scrollView)
 			{
+				// mmuegel
+				if (!Container.reloading)	
+					Container.Scrolled(Container.TableView.ContentOffset);
+				
 				if (!checkForRefresh)
 					return;
 				if (Container.reloading)
@@ -467,7 +473,16 @@ namespace MonoTouch.Dialog
 			
 			// We can not push a nav controller into a nav controller
 			if (nav != null && !(controller is UINavigationController))
+			{
+				// See if parent UINavigationController defines a custom back button title
+				if (nav is IBackButtonCaption)
+				{
+					string title = (nav as IBackButtonCaption).BackButtonCaption;
+					if (!String.IsNullOrEmpty(title))
+						NavigationItem.Title = title;
+				}
 				nav.PushViewController (controller, true);
+			}
 			else
 				PresentModalViewController (controller, true);
 		}
@@ -516,6 +531,11 @@ namespace MonoTouch.Dialog
 			var element = section.Elements [indexPath.Row];
 
 			element.Selected (this, tableView, indexPath);
+		}
+		
+		// muegel: be notified about scroll if not loading new data
+		public virtual void Scrolled(PointF position)
+		{
 		}
 		
 		public virtual UITableView MakeTableView (RectangleF bounds, UITableViewStyle style)
@@ -598,8 +618,9 @@ namespace MonoTouch.Dialog
 			TableSource = CreateSizingSource (root.UnevenRows);
 			tableView.Source = TableSource;
 		}
-
-		public void ReloadData ()
+		
+		// mmuegel: make virtual so sub-class can be informed of reload
+		public virtual void ReloadData ()
 		{
 			if (root == null)
 				return;
@@ -668,5 +689,11 @@ namespace MonoTouch.Dialog
 			this.pushing = pushing;
 			this.root = root;
 		}
+		
+		public virtual DialogViewController MakeDialogViewController(RootElement root, bool pushing)
+		{
+			return new DialogViewController(root, pushing) { Autorotate = true };
+		}
+		
 	}
 }

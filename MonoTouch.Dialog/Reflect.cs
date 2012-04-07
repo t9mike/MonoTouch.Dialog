@@ -340,6 +340,10 @@ namespace MonoTouch.Dialog
 					foreach (var fi in mType.GetFields (BindingFlags.Public | BindingFlags.Static)){
 						ulong v = Convert.ToUInt64 (GetValue (fi, null));
 						
+						// Ignore an enum value that has [Skip] attribute
+						if (Attribute.GetCustomAttribute(fi, typeof(SkipAttribute)) != null)
+							continue;
+						
 						if (v == evalue)
 							selected = idx;
 						

@@ -30,6 +30,14 @@ namespace MonoTouch.Dialog
 			return Height(tableView.Bounds);
 		}
 		
+		protected virtual void ElementUnassignedFromView(UITableViewCell old_cell_view)
+		{
+		}
+
+		protected virtual void ElementAssignedToView(UITableViewCell new_cell_view, bool first_time)
+		{
+		}
+
 		public override UITableViewCell GetCell (UITableView tv)
 		{
 			OwnerDrawnCell cell = tv.DequeueReusableCell(this.CellReuseIdentifier) as OwnerDrawnCell;
@@ -37,10 +45,15 @@ namespace MonoTouch.Dialog
 			if (cell == null)
 			{
 				cell = new OwnerDrawnCell(this, this.Style, this.CellReuseIdentifier);
+				ElementAssignedToView(cell, true);
 			}
 			else
 			{
+				var old_element = cell.Element;
 				cell.Element = this;
+				if (old_element != null)
+					old_element.ElementUnassignedFromView(cell);
+				ElementAssignedToView(cell, false);
 			}
 			
 			cell.Update();

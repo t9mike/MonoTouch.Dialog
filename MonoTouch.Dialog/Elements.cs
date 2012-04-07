@@ -21,7 +21,9 @@ using MonoTouch.UIKit;
 using MonoTouch.CoreGraphics;
 using System.Drawing;
 using MonoTouch.Foundation;
+#if !NO_IMAGE_LOADERX
 using MonoTouch.Dialog.Utilities;
+#endif
 
 namespace MonoTouch.Dialog
 {
@@ -42,7 +44,21 @@ namespace MonoTouch.Dialog
 		/// <summary>
 		///  The caption to display for this given element
 		/// </summary>
-		public string Caption;
+		public string Caption
+		{
+			get { return caption; }
+			set
+			{
+				caption = value;
+				var cell = GetActiveCell() as UITableViewCell;
+				if (cell != null)
+				{
+					cell.TextLabel.Text = value;
+					this.GetContainerTableView().ReloadData();
+				}
+			}
+		}
+		string caption;
 		
 		/// <summary>
 		///  Initializes the element with the given caption.
@@ -254,8 +270,10 @@ namespace MonoTouch.Dialog
 	/// </summary>
 	public class BooleanElement : BoolElement {
 		static NSString bkey = new NSString ("BooleanElement");
-		UISwitch sw;
 		
+		// protected instead of private so thats sub-class can override GetCell() to adjust switch
+		protected UISwitch sw;
+				
 		public BooleanElement (string caption, bool value) : base (caption, value)
 		{  }
 		
@@ -545,6 +563,8 @@ namespace MonoTouch.Dialog
 				return nsUrl.ToString ();
 			}
 			set {
+				if (nsUrl != null)
+					nsUrl.Dispose();
 				nsUrl = new NSUrl (value);
 			}
 		}
@@ -647,6 +667,7 @@ namespace MonoTouch.Dialog
 		static NSString skeyvalue = new NSString ("StringElementValue");
 		public UITextAlignment Alignment = UITextAlignment.Left;
 		public string Value;
+		public bool DeselectAfterTapHandled = true;
 		
 		public StringElement (string caption) : base (caption) {}
 		
@@ -661,13 +682,20 @@ namespace MonoTouch.Dialog
 		}
 		
 		public event NSAction Tapped;
-				
+		
+		public bool HasTapListener
+		{
+			get { return Tapped != null; }
+		}
+			
+		public bool HighlightIfHasTapListener = true;
+		
 		public override UITableViewCell GetCell (UITableView tv)
 		{
 			var cell = tv.DequeueReusableCell (Value == null ? skey : skeyvalue);
 			if (cell == null){
 				cell = new UITableViewCell (Value == null ? UITableViewCellStyle.Default : UITableViewCellStyle.Value1, skey);
-				cell.SelectionStyle = (Tapped != null) ? UITableViewCellSelectionStyle.Blue : UITableViewCellSelectionStyle.None;
+				cell.SelectionStyle = (HasTapListener && HighlightIfHasTapListener) ? UITableViewCellSelectionStyle.Blue : UITableViewCellSelectionStyle.None;
 			}
 			cell.Accessory = UITableViewCellAccessory.None;
 			cell.TextLabel.Text = Caption;
@@ -689,7 +717,8 @@ namespace MonoTouch.Dialog
 		{
 			if (Tapped != null)
 				Tapped ();
-			tableView.DeselectRow (indexPath, true);
+			if (DeselectAfterTapHandled)
+				tableView.DeselectRow (indexPath, true);
 		}
 		
 		public override bool Matches (string text)
@@ -768,7 +797,7 @@ namespace MonoTouch.Dialog
 		// Background color for the cell (alternative: BackgroundUri)
 		public UIColor BackgroundColor {
 			get {
-				return extraInfo == null ? null : extraInfo.BackgroundColor;
+				return extraInfo == null ? UIColor.White : extraInfo.BackgroundColor;
 			}
 			set {
 				OnImageInfo ().BackgroundColor = value;
@@ -807,7 +836,8 @@ namespace MonoTouch.Dialog
 			var cell = tv.DequeueReusableCell (key);
 			if (cell == null){
 				cell = new UITableViewCell (style, key);
-				cell.SelectionStyle = UITableViewCellSelectionStyle.Blue;
+				// mmuegel: should only set SelectionStyle to Blue if there is an event wired up
+				cell.SelectionStyle = (HasTapListener && HighlightIfHasTapListener) ? UITableViewCellSelectionStyle.Blue : UITableViewCellSelectionStyle.None;
 			}
 			PrepareCell (cell);
 			return cell;
@@ -2753,6 +2783,7 @@ namespace MonoTouch.Dialog
 			} 
 		le:
 			cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
+			cell.BackgroundColor = UIColor.White;
 			
 			return cell;
 		}
@@ -2768,20 +2799,17 @@ namespace MonoTouch.Dialog
 		/// <summary>
 		/// Creates the UIViewController that will be pushed by this RootElement
 		/// </summary>
-		protected virtual UIViewController MakeViewController ()
+		protected virtual UIViewController MakeViewController (DialogViewController dvc)
 		{
 			if (createOnSelected != null)
-				return createOnSelected (this);
-			
-			return new DialogViewController (this, true) {
-				Autorotate = true
-			};
+				return createOnSelected (this);		
+			return dvc.MakeDialogViewController(this, true);
 		}
 		
 		public override void Selected (DialogViewController dvc, UITableView tableView, NSIndexPath path)
 		{
 			tableView.DeselectRow (path, false);
-			var newDvc = MakeViewController ();
+			var newDvc = MakeViewController (dvc);
 			PrepareDialogViewController (newDvc);
 			dvc.ActivateController (newDvc);
 		}

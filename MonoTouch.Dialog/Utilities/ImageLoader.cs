@@ -1,3 +1,4 @@
+#if !NO_IMAGE_LOADERX
 // Copyright 2010-2011 Miguel de Icaza
 //
 // Based on the TweetStation specific ImageStore
@@ -356,3 +357,4 @@ namespace MonoTouch.Dialog.Utilities
 		}
 	}
 }
+#endif
