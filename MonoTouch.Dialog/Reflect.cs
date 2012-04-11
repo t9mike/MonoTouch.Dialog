@@ -341,14 +341,13 @@ namespace MonoTouch.Dialog
 						ulong v = Convert.ToUInt64 (GetValue (fi, null));
 						
 						// Ignore an enum value that has [Skip] attribute
-						if (Attribute.GetCustomAttribute(fi, typeof(SkipAttribute)) != null)
+						if (Skip (fi))
 							continue;
 						
 						if (v == evalue)
 							selected = idx;
 						
-						CaptionAttribute ca = Attribute.GetCustomAttribute(fi, typeof(CaptionAttribute)) as CaptionAttribute;
-						csection.Add (new RadioElement (ca != null ? ca.Caption : MakeCaption (fi.Name)));
+						csection.Add (new RadioElement (Caption(fi)));
 						idx++;
 					}
 					
@@ -446,12 +445,87 @@ namespace MonoTouch.Dialog
 						SetValue (group.mi, obj, re.RadioSelected);
 					} else if (re.group as RadioGroup != null){
 						var mType = GetTypeForMember (mi);
-						var fi = mType.GetFields (BindingFlags.Public | BindingFlags.Static) [re.RadioSelected];
+						int idx = 0;
+						// Hunt for the radio element that is selected
+						foreach (var fi in mType.GetFields (BindingFlags.Public | BindingFlags.Static))
+						{
+							// Honor [Skip] attribute
+							if (Skip(fi))
+								continue;
+							if (idx++ == re.RadioSelected)
+							{
+								SetValue (mi, obj, fi.GetValue (null));
+								break;
+							}
+						}
 						
-						SetValue (mi, obj, fi.GetValue (null));
 					}
 				}
 			}
+		}
+		
+		/// <summary>
+		/// Update table elements previously bound based on the current values of the
+		/// underlying object.
+		/// </summary>
+		public void Load ()
+		{
+			foreach (var dk in mappings){
+				Element element = dk.Key;
+				MemberInfo mi = dk.Value.Member;
+				object obj = dk.Value.Obj;
+				
+				if (element is DateTimeElement)
+					((DateTimeElement) element).DateValue = (DateTime)GetValue (mi, obj);
+				else if (element is FloatElement)
+					((FloatElement) element).Value = (float)GetValue (mi, obj);
+				else if (element is BooleanElement)
+					((BooleanElement) element).Value = (bool)GetValue (mi, obj);
+				else if (element is CheckboxElement)
+					((CheckboxElement) element).Value = (bool)GetValue (mi, obj);
+				else if (element is EntryElement){
+					var entry = (EntryElement) element;
+					entry.Value = (string)GetValue(mi, obj);
+				} else if (element is ImageElement)
+					((ImageElement) element).Value = (UIImage)GetValue (mi, obj);
+				else if (element is RootElement){
+					var re = element as RootElement;
+					if (re.group as MemberRadioGroup != null){
+						var group = re.group as MemberRadioGroup;
+						re.RadioSelected = (int)GetValue (group.mi, obj);
+					} else if (re.group as RadioGroup != null){
+						var mType = GetTypeForMember (mi);
+						int idx = 0;
+						// Hunt for the radio element that is to be selected
+						foreach (var fi in mType.GetFields (BindingFlags.Public | BindingFlags.Static))
+						{
+							// Honor [Skip] attribute
+							if (Skip(fi))
+								continue;
+							if ((int)fi.GetValue (null) == (int)GetValue (mi, obj))
+							{
+								re.RadioSelected = idx;
+								break;
+							}
+							idx++;
+						}
+					}
+				}
+			}
+
+			if (Root.TableView != null)
+				Root.TableView.ReloadData();
+		}
+		
+		private bool Skip(FieldInfo fi)
+		{
+			return Attribute.GetCustomAttribute(fi, typeof(SkipAttribute)) != null;
+		}
+		
+		private string Caption(FieldInfo fi)
+		{
+			CaptionAttribute ca = Attribute.GetCustomAttribute(fi, typeof(CaptionAttribute)) as CaptionAttribute;
+			return ca != null ? ca.Caption : MakeCaption (fi.Name);
 		}
 	}
 }
