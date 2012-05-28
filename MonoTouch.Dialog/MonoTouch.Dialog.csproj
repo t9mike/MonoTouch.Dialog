@@ -81,7 +81,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="monotouch" />
-    <Reference Include="System.Json" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -112,5 +111,11 @@
     <EmbeddedResource Include="Images\arrow.png">
       <LogicalName>arrow.png</LogicalName>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\System.Json\src\System.Json\System.Json.MT.csproj">
+      <Project>{758B221C-CBD4-40F1-AB00-62D7D3625303}</Project>
+      <Name>System.Json.MT</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
