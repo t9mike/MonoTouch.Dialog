@@ -750,7 +750,19 @@ namespace MonoTouch.Dialog
 		
 		protected UITableViewCellStyle style;
 		public event NSAction AccessoryTapped;
-		public UIFont Font;
+		public UIFont Font
+		{
+			get { return _Font; }
+			set
+			{
+				_Font = value;
+				var cell = GetActiveCell();
+				if (cell != null)
+					cell.TextLabel.Font = value;
+			}
+		}
+		private UIFont _Font;
+
 		public UIFont SubtitleFont;
 		public UIColor TextColor;
 		public UILineBreakMode LineBreakMode = UILineBreakMode.WordWrap;

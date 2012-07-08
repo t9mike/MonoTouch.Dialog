@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoTouch.Dialog", "MonoTou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "Sample\Sample.csproj", "{F6AEFFC5-4807-49A3-83C5-661E655CB59A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Json.MT", "..\System.Json\src\System.Json\System.Json.MT.csproj", "{758B221C-CBD4-40F1-AB00-62D7D3625303}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|iPhoneSimulator = Debug|iPhoneSimulator
@@ -21,6 +23,14 @@ Global
 		{3FFBFFF8-5560-4EDE-82E5-3FFDFBBA8A50}.Release|iPhone.Build.0 = Release|iPhone
 		{3FFBFFF8-5560-4EDE-82E5-3FFDFBBA8A50}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{3FFBFFF8-5560-4EDE-82E5-3FFDFBBA8A50}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{758B221C-CBD4-40F1-AB00-62D7D3625303}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{758B221C-CBD4-40F1-AB00-62D7D3625303}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{758B221C-CBD4-40F1-AB00-62D7D3625303}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{758B221C-CBD4-40F1-AB00-62D7D3625303}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{758B221C-CBD4-40F1-AB00-62D7D3625303}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{758B221C-CBD4-40F1-AB00-62D7D3625303}.Release|iPhone.Build.0 = Release|Any CPU
+		{758B221C-CBD4-40F1-AB00-62D7D3625303}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{758B221C-CBD4-40F1-AB00-62D7D3625303}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{F6AEFFC5-4807-49A3-83C5-661E655CB59A}.Debug|iPhone.ActiveCfg = Debug|iPhone
 		{F6AEFFC5-4807-49A3-83C5-661E655CB59A}.Debug|iPhone.Build.0 = Debug|iPhone
 		{F6AEFFC5-4807-49A3-83C5-661E655CB59A}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator

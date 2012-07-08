@@ -357,7 +357,7 @@ namespace MonoTouch.Dialog
 			{
 				Container.Deselected (indexPath);
 			}
-			
+
 			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
 			{
 				var onSelection = Container.OnSelection;
@@ -529,6 +529,9 @@ namespace MonoTouch.Dialog
 		{
 			var section = root.Sections [indexPath.Section];
 			var element = section.Elements [indexPath.Row];
+
+//			TableView.SetNeedsDisplay();
+//			NSRunLoop.Current.RunUntil(DateTime.Now);
 
 			element.Selected (this, tableView, indexPath);
 		}
