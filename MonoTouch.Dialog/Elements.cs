@@ -21,6 +21,9 @@ using MonoTouch.UIKit;
 using MonoTouch.CoreGraphics;
 using System.Drawing;
 using MonoTouch.Foundation;
+using Free.MonoTouch;
+
+
 #if !NO_IMAGE_LOADERX
 using MonoTouch.Dialog.Utilities;
 #endif
@@ -59,7 +62,11 @@ namespace MonoTouch.Dialog
 			}
 		}
 		string caption;
-		
+
+        public string Accessibility_Label = null;
+        public string Accessibility_Hint = null;
+        public UIAccessibilityTraits? Accessibility_Traits = null;
+
 		/// <summary>
 		///  Initializes the element with the given caption.
 		/// </summary>
@@ -1890,12 +1897,17 @@ namespace MonoTouch.Dialog
 	public class UIViewElement : Element, IElementSizing {
 		static int count;
 		NSString key;
-		protected UIView View;
+        public UIView View { get; protected set; }
 		public CellFlags Flags;
 		
 		public enum CellFlags {
 			Transparent = 1,
-			DisableSelection = 2
+			DisableSelection = 2,
+
+            /// <summary>
+            /// mmuegel: when true, don't change size after first shown.
+            /// </summary>
+            SizeOnlyOnce = 4
 		}
 		
 		/// <summary>
@@ -1917,6 +1929,10 @@ namespace MonoTouch.Dialog
 			this.Flags = transparent ? CellFlags.Transparent : 0;
 			key = new NSString ("UIViewElement" + count++);
 		}
+
+        public UIViewElement() : this("", null, false)
+        {
+        }
 		
 		protected override NSString CellKey {
 			get {
@@ -1949,9 +1965,18 @@ namespace MonoTouch.Dialog
 			return cell;
 		}
 		
-		public float GetHeight (UITableView tableView, NSIndexPath indexPath)
+        private float? First_Height = null;
+
+		public virtual float GetHeight (UITableView tableView, NSIndexPath indexPath)
 		{
-			return View.Bounds.Height;
+            if ((Flags & CellFlags.SizeOnlyOnce) != 0)
+            {
+                if (First_Height != null)
+                    return First_Height.Value;
+                First_Height = View.Bounds.Height;
+            }
+
+            return View.Bounds.Height;
 		}
 		
 		protected override void Dispose (bool disposing)
@@ -2859,7 +2884,6 @@ namespace MonoTouch.Dialog
 			if (path == null)
 				return;
 			TableView.ReloadRows (new NSIndexPath [] { path }, animation);
-		}
-		
+		}		
 	}
 }

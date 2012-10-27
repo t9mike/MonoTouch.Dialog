@@ -34,6 +34,9 @@ namespace MonoTouch.Dialog
 		{
 		}
 
+        /// <summary>
+        /// This is a good place to change the accessibility features for a cell.
+        /// </summary>
 		protected virtual void ElementAssignedToView(UITableViewCell new_cell_view, bool first_time)
 		{
 		}

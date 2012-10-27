@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Json;
+using System.Json2;
 using System.Net;
 using System.Reflection;
 using MonoTouch.Foundation;
@@ -134,6 +134,7 @@ namespace MonoTouch.Dialog {
 		
 		public static JsonElement FromFile (string file)
 		{
+            // Console.WriteLine(Environment.CurrentDirectory);
 			return FromFile (file, null);
 		}
 		
