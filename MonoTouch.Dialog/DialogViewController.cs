@@ -346,6 +346,8 @@ namespace MonoTouch.Dialog
                     cell.SetAccessibilityHint(element.Accessibility_Hint);
                 if (element.Accessibility_Traits != null)
                     cell.SetAccessibilityTraits(element.Accessibility_Traits.Value);
+                cell.SetAccessibilityElementsHidden(!element.Is_Accessible);
+                cell.SetIsAccessibilityElement(element.Is_Accessible);
 
                 return cell;
             }
@@ -531,7 +533,6 @@ namespace MonoTouch.Dialog
 		{
 			var section = root.Sections [indexPath.Section];
 			var element = section.Elements [indexPath.Row];
-			
 			element.Deselected (this, tableView, indexPath);
 		}
 		
@@ -543,8 +544,13 @@ namespace MonoTouch.Dialog
 //			TableView.SetNeedsDisplay();
 //			NSRunLoop.Current.RunUntil(DateTime.Now);
 
-			element.Selected (this, tableView, indexPath);
-		}
+            element.Selected (this, tableView, indexPath);
+//            element.GetActiveCell().MoveAccessibilityCursorTo();
+
+//            new System.Threading.Timer(delegate {
+//                element.GetActiveCell().MoveAccessibilityCursorTo();
+//            }, null, 500, System.Threading.Timeout.Infinite);
+        }
 		
 		// muegel: be notified about scroll if not loading new data
 		public virtual void Scrolled(PointF position)
@@ -694,6 +700,7 @@ namespace MonoTouch.Dialog
 		{
 			this.pushing = pushing;
 			this.root = root;
+            ClearsSelectionOnViewWillAppear = false;
 		}
 
 		public DialogViewController (UITableViewStyle style, RootElement root, bool pushing) : base (style)
@@ -701,11 +708,15 @@ namespace MonoTouch.Dialog
 			Style = style;
 			this.pushing = pushing;
 			this.root = root;
-		}
+            ClearsSelectionOnViewWillAppear = false;
+        }
 		
 		public virtual DialogViewController MakeDialogViewController(RootElement root, bool pushing)
 		{
-			return new DialogViewController(root, pushing) { Autorotate = true };
+            return new DialogViewController(root, pushing) { 
+                Autorotate = true, 
+                ClearsSelectionOnViewWillAppear = ClearsSelectionOnViewWillAppear 
+            };
 		}
 		
 	}

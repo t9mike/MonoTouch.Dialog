@@ -63,9 +63,36 @@ namespace MonoTouch.Dialog
 		}
 		string caption;
 
-        public string Accessibility_Label = null;
-        public string Accessibility_Hint = null;
-        public UIAccessibilityTraits? Accessibility_Traits = null;
+        /// <summary>
+        /// Default is true. When false, 
+        /// </summary>
+        public virtual bool Is_Accessible
+        {
+            get { return _Is_Accessible; }
+            set { _Is_Accessible = value; }
+        }
+        private bool _Is_Accessible = true;
+
+        public virtual string Accessibility_Label
+        {
+            get { return _Accessibility_Label; }
+            set { _Accessibility_Label = value; }
+        }
+        private string _Accessibility_Label;
+
+        public virtual string Accessibility_Hint
+        {
+            get { return _Accessibility_Hint; }
+            set { _Accessibility_Hint = value; }
+        }
+        private string _Accessibility_Hint = null;
+
+        public virtual UIAccessibility.TraitFlag? Accessibility_Traits
+        {
+            get { return _Accessibility_Traits; }
+            set { _Accessibility_Traits = value; }
+        }
+        private UIAccessibility.TraitFlag? _Accessibility_Traits = null;
 
 		/// <summary>
 		///  Initializes the element with the given caption.
@@ -75,7 +102,8 @@ namespace MonoTouch.Dialog
 		/// </param>
 		public Element (string caption)
 		{
-			this.Caption = caption;
+            Accessibility_Label = caption;
+            this.Caption = caption;
 		}	
 		
 		public void Dispose ()
@@ -204,6 +232,14 @@ namespace MonoTouch.Dialog
 			return tv.CellAt (path);
 		}
 		
+        /// <summary>
+        /// Returns true if the cell is visible.
+        /// </summary>
+        public bool IsVisible
+        {
+            get { return GetActiveCell() != null; }
+        }
+
 		/// <summary>
 		///  Returns the IndexPath of a given element.   This is only valid for leaf elements,
 		///  it does not work for a toplevel RootElement or a Section of if the Element has
@@ -1969,6 +2005,9 @@ namespace MonoTouch.Dialog
 
 		public virtual float GetHeight (UITableView tableView, NSIndexPath indexPath)
 		{
+            if (View == null)
+                return 0;
+
             if ((Flags & CellFlags.SizeOnlyOnce) != 0)
             {
                 if (First_Height != null)
@@ -1978,7 +2017,7 @@ namespace MonoTouch.Dialog
 
             return View.Bounds.Height;
 		}
-		
+
 		protected override void Dispose (bool disposing)
 		{
 			base.Dispose (disposing);
@@ -2447,6 +2486,7 @@ namespace MonoTouch.Dialog
 		{
 			summarySection = -1;
 			Sections = new List<Section> ();
+            Accessibility_Traits = UIAccessibility.TraitFlag.Button;
 		}
 
 		/// <summary>
@@ -2462,7 +2502,8 @@ namespace MonoTouch.Dialog
 			summarySection = -1;
 			this.createOnSelected = createOnSelected;
 			Sections = new List<Section> ();
-		}
+            Accessibility_Traits = UIAccessibility.TraitFlag.Button;
+        }
 		
 		/// <summary>
 		///   Initializes a RootElement with a caption with a summary fetched from the specified section and leement
@@ -2480,7 +2521,8 @@ namespace MonoTouch.Dialog
 		{
 			summarySection = section;
 			summaryElement = element;
-		}
+            Accessibility_Traits = UIAccessibility.TraitFlag.Button;
+        }
 		
 		/// <summary>
 		/// Initializes a RootElement that renders the summary based on the radio settings of the contained elements. 
@@ -2495,7 +2537,8 @@ namespace MonoTouch.Dialog
 		public RootElement (string caption, Group group) : base (caption)
 		{
 			this.group = group;
-		}
+            Accessibility_Traits = UIAccessibility.TraitFlag.Button;
+        }
 		
 		internal List<Section> Sections = new List<Section> ();
 

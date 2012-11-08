@@ -16,6 +16,7 @@ using System.Text;
 using MonoTouch.UIKit;
 using System.Drawing;
 using MonoTouch.Foundation;
+using Free.MonoTouch;
 
 namespace MonoTouch.Dialog
 {
@@ -235,14 +236,16 @@ namespace MonoTouch.Dialog
 					section = new Section ();
 				
 				Element element = null;
-				if (mType == typeof (string)){
+                bool add_button_access_trait = false;
+
+                if (mType == typeof (string)){
 					PasswordAttribute pa = null;
 					AlignmentAttribute align = null;
 					EntryAttribute ea = null;
 					object html = null;
 					NSAction invoke = null;
 					bool multi = false;
-					
+
 					foreach (object attr in attrs){
 						if (attr is PasswordAttribute)
 							pa = attr as PasswordAttribute;
@@ -257,6 +260,7 @@ namespace MonoTouch.Dialog
 						
 						if (attr is OnTapAttribute){
 							string mname = ((OnTapAttribute) attr).Method;
+                            add_button_access_trait = true;
 							
 							if (callbacks == null){
 								throw new Exception ("Your class contains [OnTap] attributes, but you passed a null object for `context' in the constructor");
@@ -387,6 +391,9 @@ namespace MonoTouch.Dialog
 				
 				if (element == null)
 					continue;
+                if (add_button_access_trait)
+                    element.Accessibility_Traits = UIAccessibility.TraitFlag.Button;
+
 				section.Add (element);
 				mappings [element] = new MemberAndInstance (mi, o);
 			}
