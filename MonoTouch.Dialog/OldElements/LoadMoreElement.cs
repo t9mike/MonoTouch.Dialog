@@ -5,13 +5,32 @@
 using System;
 using System.Drawing;
 using System.Threading;
+
+#if XAMCORE_2_0
+using CoreFoundation;
+using Foundation;
+using UIKit;
+using CoreGraphics;
+#else
 using MonoTouch.CoreFoundation;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using MonoTouch.CoreGraphics;
+#endif
+
+#if !XAMCORE_2_0
+using nint = global::System.Int32;
+using nuint = global::System.UInt32;
+using nfloat = global::System.Single;
+
+using CGSize = global::System.Drawing.SizeF;
+using CGPoint = global::System.Drawing.PointF;
+using CGRect = global::System.Drawing.RectangleF;
+#endif
 
 namespace MonoTouch.Dialog
 {
-	public class LoadMoreElement : Element, IElementSizing
+	public partial class LoadMoreElement : Element, IElementSizing
 	{
 		static NSString key = new NSString ("LoadMoreElement");
 		public string NormalCaption { get; set; }
@@ -56,6 +75,7 @@ namespace MonoTouch.Dialog
 				};
 				caption = new UILabel () {
 					AdjustsFontSizeToFitWidth = false,
+					AutoresizingMask = UIViewAutoresizing.FlexibleWidth,
 					Tag = 2
 				};
 				cell.ContentView.AddSubview (caption);
@@ -125,15 +145,15 @@ namespace MonoTouch.Dialog
 			}
 		}
 		
-		SizeF GetTextSize (string text)
+		CGSize GetTextSize (string text)
 		{
-			return new NSString (text).StringSize (Font, UIScreen.MainScreen.Bounds.Width, UILineBreakMode.TailTruncation);
+			return new NSString (text).StringSize (Font, (float)UIScreen.MainScreen.Bounds.Width, UILineBreakMode.TailTruncation);
 		}
 		
 		const int pad = 10;
 		const int isize = 20;
 		
-		public float GetHeight (UITableView tableView, NSIndexPath indexPath)
+		public nfloat GetHeight (UITableView tableView, NSIndexPath indexPath)
 		{
 			return Height ?? GetTextSize (Animating ? LoadingCaption : NormalCaption).Height + 2*pad;
 		}
@@ -145,9 +165,9 @@ namespace MonoTouch.Dialog
 			var size = GetTextSize (Animating ? LoadingCaption : NormalCaption);
 			
 			if (!activityIndicator.Hidden)
-				activityIndicator.Frame = new RectangleF ((sbounds.Width-size.Width)/2-isize*2, pad, isize, isize);
+				activityIndicator.Frame = new CGRect ((sbounds.Width-size.Width)/2-isize*2, pad, isize, isize);
 
-			caption.Frame = new RectangleF (10, pad, sbounds.Width-20, size.Height);
+			caption.Frame = new CGRect (10, pad, sbounds.Width-20, size.Height);
 		}
 		
 		public UITextAlignment Alignment { 

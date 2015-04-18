@@ -13,9 +13,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using MonoTouch.UIKit;
 using System.Drawing;
+
+#if XAMCORE_2_0
+using UIKit;
+using Foundation;
+
+using NSAction = global::System.Action;
+#else
+using MonoTouch.UIKit;
 using MonoTouch.Foundation;
+#endif
 
 namespace MonoTouch.Dialog
 {
@@ -30,6 +38,9 @@ namespace MonoTouch.Dialog
 
 		public string Placeholder;
 		public UIKeyboardType KeyboardType;
+		public UITextAutocorrectionType AutocorrectionType;
+		public UITextAutocapitalizationType AutocapitalizationType;
+		public UITextFieldViewMode ClearButtonMode;
 	}
 
 	[AttributeUsage (AttributeTargets.Field | AttributeTargets.Property, Inherited=false)]
@@ -278,7 +289,7 @@ namespace MonoTouch.Dialog
 					if (pa != null)
 						element = new EntryElement (caption, pa.Placeholder, value, true);
 					else if (ea != null)
-						element = new EntryElement (caption, ea.Placeholder, value) { KeyboardType = ea.KeyboardType };
+						element = new EntryElement (caption, ea.Placeholder, value) { KeyboardType = ea.KeyboardType, AutocapitalizationType = ea.AutocapitalizationType, AutocorrectionType = ea.AutocorrectionType, ClearButtonMode = ea.ClearButtonMode };
 					else if (multi)
 						element = new MultilineElement (caption, value);
 					else if (html != null)

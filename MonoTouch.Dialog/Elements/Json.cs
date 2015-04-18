@@ -15,8 +15,28 @@ using System.IO;
 using System.Json;
 using System.Net;
 using System.Reflection;
+
+#if XAMCORE_2_0
+using Foundation;
+using UIKit;
+using CoreGraphics;
+
+using NSAction = global::System.Action;
+#else
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using MonoTouch.CoreGraphics;
+#endif
+
+#if !XAMCORE_2_0
+using nint = global::System.Int32;
+using nuint = global::System.UInt32;
+using nfloat = global::System.Single;
+
+using CGSize = global::System.Drawing.SizeF;
+using CGPoint = global::System.Drawing.PointF;
+using CGRect = global::System.Drawing.RectangleF;
+#endif
 
 namespace MonoTouch.Dialog {
 	
@@ -32,7 +52,7 @@ namespace MonoTouch.Dialog {
 		{
 			var cvb = cell.ContentView.Bounds;
 
-			var spinner = new UIActivityIndicatorView (new RectangleF (cvb.Width-CSIZE/2, (cvb.Height-CSIZE)/2, CSIZE, CSIZE)) {
+			var spinner = new UIActivityIndicatorView (new CGRect (cvb.Width-CSIZE/2, (cvb.Height-CSIZE)/2, CSIZE, CSIZE)) {
 				Tag = SPINNER_TAG,
 				ActivityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray,
 			};
@@ -66,7 +86,42 @@ namespace MonoTouch.Dialog {
 			}
 			return cell;
 		}
-		
+
+#if XAMCORE_2_0
+		class ConnectionDelegate : NSUrlConnectionDataDelegate {
+#else
+		class ConnectionDelegate : NSUrlConnectionDelegate {
+#endif
+			Action<Stream,NSError> callback;
+			NSMutableData buffer;
+
+			public ConnectionDelegate (Action<Stream,NSError> callback) 
+			{
+				this.callback = callback;
+				buffer = new NSMutableData ();
+			}
+
+			public override void ReceivedResponse(NSUrlConnection connection, NSUrlResponse response)
+			{
+				buffer.Length = 0;
+			}
+
+			public override void FailedWithError(NSUrlConnection connection, NSError error)
+			{
+				callback (null, error);
+			}
+
+			public override void ReceivedData(NSUrlConnection connection, NSData data)
+			{
+				buffer.AppendData (data);
+			}
+
+			public override void FinishedLoading(NSUrlConnection connection)
+			{
+				callback (buffer.AsStream (), null);
+			}
+		}
+
 		public override void Selected (DialogViewController dvc, UITableView tableView, NSIndexPath path)
 		{
 			if (Url == null){
@@ -80,35 +135,31 @@ namespace MonoTouch.Dialog {
 			var cell = GetActiveCell ();
 			var spinner = StartSpinner (cell);
 			loading = true;
-			
-			var wc = new WebClient ();
-			
-			wc.DownloadStringCompleted += delegate  (object sender, DownloadStringCompletedEventArgs e){
-				dvc.BeginInvokeOnMainThread (delegate {
-					loading = false;
-					spinner.StopAnimating ();
-					spinner.RemoveFromSuperview ();
-					if (e.Result != null){
-						try {
-							var obj = JsonValue.Load (new StringReader (e.Result)) as JsonObject;
-							if (obj != null){
-								var root = JsonElement.FromJson (obj);
-								var newDvc = new DialogViewController (root, true) {
-									Autorotate = true
-								};
-								PrepareDialogViewController (newDvc);
-								dvc.ActivateController (newDvc);
-								return;
-							}
-						} catch (Exception ee){
-							Console.WriteLine (ee);
+
+			var request = new NSUrlRequest (new NSUrl (Url), NSUrlRequestCachePolicy.UseProtocolCachePolicy, 60);
+			var connection = new NSUrlConnection (request, new ConnectionDelegate ((data,error) => {
+				loading = false;
+				spinner.StopAnimating ();
+				spinner.RemoveFromSuperview ();
+				if (error == null){
+					try {
+						var obj = JsonValue.Load (new StreamReader (data)) as JsonObject;
+						if (obj != null){
+							var root = JsonElement.FromJson (obj);
+							var newDvc = new DialogViewController (root, true) {
+								Autorotate = true
+							};
+							PrepareDialogViewController (newDvc);
+							dvc.ActivateController (newDvc);
+							return;
 						}
+					} catch (Exception ee){
+						Console.WriteLine (ee);
 					}
-					var alert = new UIAlertView ("Error", "Unable to download data", null, "Ok");
-					alert.Show ();
-				});
-			};
-			wc.DownloadStringAsync (new Uri (Url));
+				}
+				var alert = new UIAlertView ("Error", "Unable to download data", null, "Ok");
+				alert.Show ();
+			}));
 		}
 
 		public JsonElement (string caption, string url) : base (caption)
@@ -460,10 +511,10 @@ namespace MonoTouch.Dialog {
 		{
 			int q = kvalue.LastIndexOf ("-");
 			string fname = kvalue;
-			float fsize = 0;
+			nfloat fsize = 0;
 			
 			if (q != -1) {
-				float.TryParse (kvalue.Substring (q+1), out fsize);
+				nfloat.TryParse (kvalue.Substring (q+1), out fsize);
 				fname = kvalue.Substring (0, q);
 			}
 			if (fsize <= 0)
@@ -514,10 +565,10 @@ namespace MonoTouch.Dialog {
 			string background = null;
 			NSAction ontap = null;
 			NSAction onaccessorytap = null;
-			int? lines;
-			UITableViewCellAccessory? accessory;
-			UILineBreakMode? linebreakmode;
-			UITextAlignment? alignment;
+			int? lines = null;
+			UITableViewCellAccessory? accessory = null;
+			UILineBreakMode? linebreakmode = null;
+			UITextAlignment? alignment = null;
 			UIColor textcolor = null, detailcolor = null;
 			UIFont font = null;
 			UIFont detailfont = null;
@@ -546,9 +597,16 @@ namespace MonoTouch.Dialog {
 					NSAction d = delegate {
 						string cname = sontap.Substring (0, p);
 						string mname = sontap.Substring (p+1);
-						var mi = Type.GetType (cname).GetMethod (mname, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-						if (mi != null)
-							mi.Invoke (null, new object [] { data });
+						foreach (var a in AppDomain.CurrentDomain.GetAssemblies ()){
+							Type type = a.GetType (cname);
+						
+							if (type != null){
+								var mi = type.GetMethod (mname, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+								if (mi != null)
+									mi.Invoke (null, new object [] { data });
+								break;
+							}
+						}
 					};
 					if (kv.Key == "ontap")
 						ontap = d;
