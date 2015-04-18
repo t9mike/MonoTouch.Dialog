@@ -2142,10 +2142,11 @@ namespace MonoTouch.Dialog
 			} 
 			return cell;
 		}
-		
-        private float? First_Height = null;
+            
 
-		public virtual float GetHeight (UITableView tableView, NSIndexPath indexPath)
+        private nfloat? First_Height = null;
+
+        public virtual nfloat GetHeight (UITableView tableView, NSIndexPath indexPath)
 		{
             if (View == null)
                 return 0;

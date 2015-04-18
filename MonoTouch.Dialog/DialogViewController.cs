@@ -581,7 +581,7 @@ namespace MonoTouch.Dialog
         }
 		
 		// muegel: be notified about scroll if not loading new data
-		public virtual void Scrolled(PointF position)
+		public virtual void Scrolled(CGPoint position)
 		{
 		}
 		
