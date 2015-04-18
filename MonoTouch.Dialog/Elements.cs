@@ -21,7 +21,6 @@ using MonoTouch.UIKit;
 using MonoTouch.CoreGraphics;
 using System.Drawing;
 using MonoTouch.Foundation;
-using Free.MonoTouch;
 
 
 #if !NO_IMAGE_LOADERX
@@ -87,12 +86,12 @@ namespace MonoTouch.Dialog
         }
         private string _Accessibility_Hint = null;
 
-        public virtual UIAccessibility.TraitFlag? Accessibility_Traits
+        public virtual UIAccessibilityTrait? Accessibility_Traits
         {
             get { return _Accessibility_Traits; }
             set { _Accessibility_Traits = value; }
         }
-        private UIAccessibility.TraitFlag? _Accessibility_Traits = null;
+        private UIAccessibilityTrait? _Accessibility_Traits = null;
 
 		/// <summary>
 		///  Initializes the element with the given caption.
@@ -2486,7 +2485,7 @@ namespace MonoTouch.Dialog
 		{
 			summarySection = -1;
 			Sections = new List<Section> ();
-            Accessibility_Traits = UIAccessibility.TraitFlag.Button;
+            Accessibility_Traits = UIAccessibilityTrait.Button;
 		}
 
 		/// <summary>
@@ -2502,7 +2501,7 @@ namespace MonoTouch.Dialog
 			summarySection = -1;
 			this.createOnSelected = createOnSelected;
 			Sections = new List<Section> ();
-            Accessibility_Traits = UIAccessibility.TraitFlag.Button;
+            Accessibility_Traits = UIAccessibilityTrait.Button;
         }
 		
 		/// <summary>
@@ -2521,7 +2520,7 @@ namespace MonoTouch.Dialog
 		{
 			summarySection = section;
 			summaryElement = element;
-            Accessibility_Traits = UIAccessibility.TraitFlag.Button;
+            Accessibility_Traits = UIAccessibilityTrait.Button;
         }
 		
 		/// <summary>
@@ -2537,7 +2536,7 @@ namespace MonoTouch.Dialog
 		public RootElement (string caption, Group group) : base (caption)
 		{
 			this.group = group;
-            Accessibility_Traits = UIAccessibility.TraitFlag.Button;
+            Accessibility_Traits = UIAccessibilityTrait.Button;
         }
 		
 		internal List<Section> Sections = new List<Section> ();

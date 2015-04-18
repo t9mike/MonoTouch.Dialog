@@ -14,7 +14,6 @@ using MonoTouch.UIKit;
 using System.Drawing;
 using System.Collections.Generic;
 using MonoTouch.Foundation;
-using Free.MonoTouch;
 
 namespace MonoTouch.Dialog
 {
@@ -341,13 +340,13 @@ namespace MonoTouch.Dialog
 				var cell = element.GetCell (tableView);
 
                 if (!String.IsNullOrEmpty(element.Accessibility_Label))
-                    cell.SetAccessibilityLabel(element.Accessibility_Label);
+                    cell.AccessibilityHint = element.Accessibility_Label;
                 if (!String.IsNullOrEmpty(element.Accessibility_Hint))
-                    cell.SetAccessibilityHint(element.Accessibility_Hint);
+                    cell.AccessibilityHint = element.Accessibility_Hint;
                 if (element.Accessibility_Traits != null)
-                    cell.SetAccessibilityTraits(element.Accessibility_Traits.Value);
-                cell.SetAccessibilityElementsHidden(!element.Is_Accessible);
-                cell.SetIsAccessibilityElement(element.Is_Accessible);
+                    cell.AccessibilityTraits = element.Accessibility_Traits.Value;
+                cell.AccessibilityElementsHidden = !element.Is_Accessible;
+                cell.IsAccessibilityElement = element.Is_Accessible;
 
                 return cell;
             }

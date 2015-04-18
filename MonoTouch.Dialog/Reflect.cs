@@ -16,7 +16,6 @@ using System.Text;
 using MonoTouch.UIKit;
 using System.Drawing;
 using MonoTouch.Foundation;
-using Free.MonoTouch;
 
 namespace MonoTouch.Dialog
 {
@@ -392,7 +391,7 @@ namespace MonoTouch.Dialog
 				if (element == null)
 					continue;
                 if (add_button_access_trait)
-                    element.Accessibility_Traits = UIAccessibility.TraitFlag.Button;
+                    element.Accessibility_Traits = UIAccessibilityTrait.Button;
 
 				section.Add (element);
 				mappings [element] = new MemberAndInstance (mi, o);
