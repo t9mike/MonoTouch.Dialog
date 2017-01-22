@@ -364,7 +364,7 @@ namespace MonoTouch.Dialog
 			var cell = tv.DequeueReusableCell (CellKey);
 			if (cell == null){
 				cell = new UITableViewCell (UITableViewCellStyle.Default, CellKey);
-				cell.BackgroundColor = UIColor.White;
+				cell.BackgroundColor = UIColor.Clear;
 				cell.SelectionStyle = UITableViewCellSelectionStyle.None;
 			} else
 				RemoveTag (cell, 1);
@@ -682,7 +682,7 @@ namespace MonoTouch.Dialog
 			};
 
 			web = new UIWebView (UIScreen.MainScreen.Bounds) {
-				BackgroundColor = UIColor.White,
+				BackgroundColor = UIColor.Clear,
 				ScalesPageToFit = true,
 				AutoresizingMask = UIViewAutoresizing.All
 			};
@@ -760,12 +760,13 @@ namespace MonoTouch.Dialog
 			if (cell == null){
 				//cell = new UITableViewCell (Value == null ? UITableViewCellStyle.Default : UITableViewCellStyle.Value1, skey);
                 cell = new UITableViewCell (Value == null ? UITableViewCellStyle.Default : UITableViewCellStyle.Value1, Value == null ? skey : skeyvalue);
-				cell.BackgroundColor = UIColor.White;
+				cell.BackgroundColor = UIColor.Clear;
 				cell.SelectionStyle = (HasTapListener && HighlightIfHasTapListener) ? UITableViewCellSelectionStyle.Blue : UITableViewCellSelectionStyle.None;
 			}
 			cell.Accessory = UITableViewCellAccessory.None;
 			cell.TextLabel.Text = Caption;
 			cell.TextLabel.TextAlignment = Alignment;
+            cell.TextLabel.TextColor = DialogViewController.TextColor;
 			
 			// The check is needed because the cell might have been recycled.
 			if (cell.DetailTextLabel != null)
@@ -812,7 +813,7 @@ namespace MonoTouch.Dialog
 			this.style = style;
 		}
 		
-		protected UITableViewCellStyle style;
+		public UITableViewCellStyle style;
 		public event NSAction AccessoryTapped;
 		public UIFont Font
 		{
@@ -875,7 +876,7 @@ namespace MonoTouch.Dialog
 		// Background color for the cell (alternative: BackgroundUri)
 		public UIColor BackgroundColor {
 			get {
-				return extraInfo == null ? UIColor.White : extraInfo.BackgroundColor;
+				return extraInfo == null ? UIColor.Clear : extraInfo.BackgroundColor;
 			}
 			set {
 				OnImageInfo ().BackgroundColor = value;
@@ -927,7 +928,7 @@ namespace MonoTouch.Dialog
 			var tl = cell.TextLabel;
 			tl.Text = Caption;
 			tl.TextAlignment = Alignment;
-			tl.TextColor = TextColor ?? UIColor.Black;
+			tl.TextColor = TextColor ?? DialogViewController.TextColor;
 			tl.Font = Font ?? UIFont.BoldSystemFontOfSize (17);
 			tl.LineBreakMode = LineBreakMode;
 			tl.Lines = Lines;	
@@ -982,7 +983,7 @@ namespace MonoTouch.Dialog
 				cell.TextLabel.BackgroundColor = UIColor.Clear;
 			} else if (extraInfo.BackgroundUri != null){
 				var img = ImageLoader.DefaultRequestImage (extraInfo.BackgroundUri, this);
-				cell.BackgroundColor = img == null ? UIColor.White : UIColor.FromPatternImage (img);
+				cell.BackgroundColor = img == null ? UIColor.Clear : UIColor.FromPatternImage (img);
 				cell.TextLabel.BackgroundColor = UIColor.Clear;
 			} else 
 				ClearBackground (cell);
@@ -1152,7 +1153,7 @@ namespace MonoTouch.Dialog
 		}
 	}
 	
-	public partial class RadioElement : StringElement {
+    public partial class RadioElement : StyledStringElement {
 		public string Group;
 		internal int RadioIdx;
 		
@@ -1849,7 +1850,7 @@ namespace MonoTouch.Dialog
 		public UIDatePicker datePicker;
 		public int MinuteInterval = 1;
 		public event Action<DateTimeElement> DateSelected;
-		public UIColor BackgroundColor = (UIDevice.CurrentDevice.CheckSystemVersion (7, 0)) ? UIColor.White : UIColor.Black;
+		public UIColor BackgroundColor = (UIDevice.CurrentDevice.CheckSystemVersion (7, 0)) ? UIColor.Clear : DialogViewController.TextColor;
 		
 		protected internal NSDateFormatter fmt = new NSDateFormatter () {
 			DateStyle = NSDateFormatterStyle.Short
@@ -2712,7 +2713,7 @@ namespace MonoTouch.Dialog
             Accessibility_Traits = UIAccessibilityTrait.Button;
         }
 		
-		internal List<Section> Sections = new List<Section> ();
+		public List<Section> Sections = new List<Section> ();
 
 		internal NSIndexPath PathForRadio (int idx)
 		{
@@ -3037,7 +3038,7 @@ namespace MonoTouch.Dialog
 			} 
 		le:
 			cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
-			cell.BackgroundColor = UIColor.White;
+			cell.BackgroundColor = UIColor.Clear;
 			
 			return cell;
 		}

@@ -47,7 +47,7 @@ namespace MonoTouch.Dialog
 		{
 		}
 		
-		public LoadMoreElement (string normalCaption, string loadingCaption, Action<LoadMoreElement> tapped) : this (normalCaption, loadingCaption, tapped, UIFont.BoldSystemFontOfSize (16), UIColor.Black)
+		public LoadMoreElement (string normalCaption, string loadingCaption, Action<LoadMoreElement> tapped) : this (normalCaption, loadingCaption, tapped, UIFont.BoldSystemFontOfSize (16), DialogViewController.TextColor)
 		{
 		}
 		
@@ -99,7 +99,7 @@ namespace MonoTouch.Dialog
 				cell.ContentView.BackgroundColor = null;
 			}
 			caption.BackgroundColor = UIColor.Clear;
-			caption.TextColor = TextColor ?? UIColor.Black;
+			caption.TextColor = TextColor ?? DialogViewController.TextColor;
 			caption.Font = Font ?? UIFont.BoldSystemFontOfSize (16);
 			caption.TextAlignment = Alignment;
 			Layout (cell, activityIndicator, caption);

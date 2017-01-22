@@ -102,11 +102,11 @@ namespace MonoTouch.Dialog {
 			const int offset = 33;
 			nfloat bw = Bounds.Width-offset;
 			
-			UIColor.Black.SetColor ();
+			DialogViewController.TextColor.SetColor ();
 			Sender.DrawString (new CGPoint (offset, 2), (float)(bw-dateSize), SenderFont, UILineBreakMode.TailTruncation);
 			Subject.DrawString (new CGPoint (offset, 23), (float)(bw-offset-boxWidth), SubjectFont, UILineBreakMode.TailTruncation);
 			
-			//UIColor.Black.SetFill ();
+			//DialogViewController.TextColor.SetFill ();
 			//ctx.FillRect (new CGRect (offset, 40, bw-boxWidth, 34));
 			UIColor.Gray.SetColor ();
 			Body.DrawString (new CGRect (offset, 40, bw-boxWidth, 34), TextFont, UILineBreakMode.TailTruncation, UITextAlignment.Left);

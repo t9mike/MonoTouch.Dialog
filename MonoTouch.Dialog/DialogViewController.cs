@@ -43,6 +43,11 @@ namespace MonoTouch.Dialog
 	/// </summary>
 	public class DialogViewController : UITableViewController
 	{
+        /// <summary>
+        /// Default text color.
+        /// </summary>
+        public static UIColor TextColor = UIColor.Black;
+
 		public UITableViewStyle Style = UITableViewStyle.Grouped;
 		public event Action<NSIndexPath> OnSelection;
 		UISearchBar searchBar;
@@ -372,6 +377,8 @@ namespace MonoTouch.Dialog
                     cell.AccessibilityTraits = element.Accessibility_Traits.Value;
                 cell.AccessibilityElementsHidden = !element.Is_Accessible;
                 cell.IsAccessibilityElement = element.Is_Accessible;
+
+                Container.CustomizeCell(tableView, indexPath, section, element, cell);
 
                 return cell;
             }
@@ -766,5 +773,11 @@ namespace MonoTouch.Dialog
 		{
 			this.root = new RootElement ("");
 		}
+
+        public virtual void CustomizeCell(UITableView tableView, NSIndexPath indexPath,
+            Section section, Element element, UITableViewCell cell)
+        {
+        }
+
 	}
 }

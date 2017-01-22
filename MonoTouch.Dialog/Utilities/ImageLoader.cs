@@ -239,7 +239,7 @@ namespace MonoTouch.Dialog.Utilities
 		
 		static void QueueRequest (Uri uri, IImageUpdated notify)
 		{
-            throw new Exception("muegel: do not use");
+//            throw new Exception("muegel: do not use");
 			if (notify == null)
 				throw new ArgumentNullException ("notify");
 			

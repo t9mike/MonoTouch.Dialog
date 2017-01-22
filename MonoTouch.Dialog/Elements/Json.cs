@@ -480,12 +480,12 @@ namespace MonoTouch.Dialog {
 					a = tl == 9 ? FromHex (text [7]) << 4 | FromHex (text [8]) : 255;
 				} else {
 					ColorError (text);
-					return UIColor.Black;
+					return DialogViewController.TextColor;
 				}
 				return UIColor.FromRGBA (r, g, b, a);
 			}
 			ColorError (text);
-			return UIColor.Black;
+			return DialogViewController.TextColor;
 		}
 		
 		static UILineBreakMode ToLinebreakMode (string mode)

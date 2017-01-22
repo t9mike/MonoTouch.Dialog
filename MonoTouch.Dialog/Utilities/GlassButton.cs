@@ -50,7 +50,7 @@ namespace MonoTouch.Dialog
 		public GlassButton (CGRect frame) : base (frame)
 		{
 			NormalColor = new UIColor (0.55f, 0.04f, 0.02f, 1);
-			HighlightedColor = UIColor.Black;
+			HighlightedColor = DialogViewController.TextColor;
 			DisabledColor = UIColor.Gray;
 		}
 
