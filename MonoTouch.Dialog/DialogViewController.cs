@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-#if XAMCORE_2_0
+#if __UNIFIED__
 using Foundation;
 using UIKit;
 using CoreGraphics;
@@ -25,7 +25,7 @@ using MonoTouch.UIKit;
 using MonoTouch.CoreGraphics;
 #endif
 
-#if !XAMCORE_2_0
+#if !__UNIFIED__
 using nint = global::System.Int32;
 using nuint = global::System.UInt32;
 using nfloat = global::System.Single;
@@ -181,7 +181,8 @@ namespace MonoTouch.Dialog
 		/// Controls whether the DialogViewController should auto rotate
 		/// </summary>
 		public bool Autorotate { get; set; }
-		
+
+#if !__TVOS__
 		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
 		{
 			return Autorotate || toInterfaceOrientation == UIInterfaceOrientation.Portrait;
@@ -200,6 +201,7 @@ namespace MonoTouch.Dialog
 			
 			ReloadData ();
 		}
+#endif
 		
 		Section [] originalSections;
 		Element [][] originalElements;
@@ -290,13 +292,17 @@ namespace MonoTouch.Dialog
 			
 			public override void OnEditingStarted (UISearchBar searchBar)
 			{
+#if !__TVOS__
 				searchBar.ShowsCancelButton = true;
+#endif
 				container.StartSearch ();
 			}
 			
 			public override void OnEditingStopped (UISearchBar searchBar)
 			{
+#if !__TVOS__
 				searchBar.ShowsCancelButton = false;
+#endif
 				container.FinishSearch ();
 			}
 			
@@ -305,6 +311,7 @@ namespace MonoTouch.Dialog
 				container.PerformFilter (searchText ?? "");
 			}
 			
+#if !__TVOS__
 			public override void CancelButtonClicked (UISearchBar searchBar)
 			{
 				searchBar.ShowsCancelButton = false;
@@ -312,6 +319,7 @@ namespace MonoTouch.Dialog
 				container.FinishSearch ();
 				searchBar.ResignFirstResponder ();
 			}
+#endif
 			
 			public override void SearchButtonClicked (UISearchBar searchBar)
 			{
@@ -511,21 +519,26 @@ namespace MonoTouch.Dialog
 			
 			var parent = ParentViewController;
 			var nav = parent as UINavigationController;
-			
-			// We can not push a nav controller into a nav controller
-			if (nav != null && !(controller is UINavigationController))
-			{
-				// See if parent UINavigationController defines a custom back button title
-				if (nav is IBackButtonCaption)
-				{
-					string title = (nav as IBackButtonCaption).BackButtonCaption;
-					if (!String.IsNullOrEmpty(title))
-						NavigationItem.Title = title;
-				}
-				nav.PushViewController (controller, true);
-			}
-			else
+
+            // We can not push a nav controller into a nav controller
+            if (nav != null && !(controller is UINavigationController))
+            {
+                // See if parent UINavigationController defines a custom back button title
+                if (nav is IBackButtonCaption)
+                {
+                    string title = (nav as IBackButtonCaption).BackButtonCaption;
+                    if (!String.IsNullOrEmpty(title))
+                        NavigationItem.Title = title;
+                }
+                nav.PushViewController(controller, true);
+            }
+			else {
+#if __TVOS__
+				PresentViewController (controller, true, null);
+#else
 				PresentModalViewController (controller, true);
+#endif
+			}
 		}
 
 		/// <summary>
@@ -536,11 +549,16 @@ namespace MonoTouch.Dialog
 		{
 			var parent = ParentViewController;
 			var nav = parent as UINavigationController;
-#if XAMCORE_2_0
+#if __UNIFIED__
 			if (nav != null)
 				nav.PopViewController (animated);
-			else
+			else {
+#if __TVOS__
+				DismissViewController (animated, null);
+#else
 				DismissModalViewController (animated);
+#endif
+			}
 #else
 			if (nav != null)
 				nav.PopViewControllerAnimated (animated);
@@ -551,6 +569,10 @@ namespace MonoTouch.Dialog
 
 		void SetupSearch ()
 		{
+#if __TVOS__
+			// Can't create a UISearchBar in tvOS, you can only use one from a UISearchController,
+			// which require bigger changes, so just skip this for now.
+#else
 			if (enableSearch){
 				searchBar = new UISearchBar (new CGRect (0, 0, tableView.Bounds.Width, 44)) {
 					Delegate = new SearchDelegate (this)
@@ -562,6 +584,7 @@ namespace MonoTouch.Dialog
 				// Does not work with current Monotouch, will work with 3.0
 				// tableView.TableHeaderView = null;
 			}
+#endif
 		}
 		
 		public virtual void Deselected (NSIndexPath indexPath)
@@ -649,8 +672,10 @@ namespace MonoTouch.Dialog
 				return;
 			
 			root.Prepare ();
-			
+
+#if !__TVOS__
 			NavigationItem.HidesBackButton = !pushing;
+#endif
 			if (root.Caption != null)
 				NavigationItem.Title = root.Caption;
 			if (dirty){
@@ -668,8 +693,10 @@ namespace MonoTouch.Dialog
 			}
 			set {
 				pushing = value;
+#if !__TVOS__
 				if (NavigationItem != null)
 					NavigationItem.HidesBackButton = !pushing;
+#endif
 			}
 		}
 		

@@ -1,4 +1,3 @@
-#if !NO_IMAGE_LOADERX
 //
 // A simple LRU cache used for tracking the images
 //
@@ -139,4 +138,3 @@ public class LRUCache<TKey, TValue> where TValue : class, IDisposable  {
 	}		
 }
 }
-#endif

@@ -8,6 +8,7 @@
 //
 // Code licensed under the MIT X11 license
 //
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ using System.Reflection;
 using System.Text;
 using System.Drawing;
 
-#if XAMCORE_2_0
+#if __UNIFIED__
 using UIKit;
 using Foundation;
 
