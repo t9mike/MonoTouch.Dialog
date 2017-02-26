@@ -329,7 +329,7 @@ namespace MonoTouch.Dialog
 		
 		public class Source : UITableViewSource {
 			const float yboundary = 65;
-			protected DialogViewController Container;
+			public readonly DialogViewController Container;
 			protected RootElement Root;
 			bool checkForRefresh;
 			
@@ -502,8 +502,8 @@ namespace MonoTouch.Dialog
 				
 				var sizable = element as IElementSizing;
 				if (sizable == null)
-					return (nfloat)tableView.RowHeight;
-				return sizable.GetHeight (tableView, indexPath);
+					return (nfloat)tableView.RowHeight;                
+				return sizable.GetHeight (Container, indexPath);
 			}
 		}
 			
@@ -619,10 +619,15 @@ namespace MonoTouch.Dialog
 		{
 			return new UITableView (bounds, style);
 		}
-		
+
+        protected virtual CGRect GetTableSize()
+        {
+            return UIScreen.MainScreen.Bounds;
+        }
+
 		public override void LoadView ()
 		{
-			tableView = MakeTableView (UIScreen.MainScreen.Bounds, Style);
+			tableView = MakeTableView (GetTableSize(), Style);
 			tableView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleTopMargin;
 			tableView.AutosizesSubviews = true;
 			

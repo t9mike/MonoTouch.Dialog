@@ -43,9 +43,9 @@ namespace MonoTouch.Dialog
 			this.Style = style;
 		}
 		
-		public nfloat GetHeight (UITableView tableView, NSIndexPath indexPath)
+		public nfloat GetHeight (DialogViewController dvc, NSIndexPath indexPath)
 		{
-			return Height(tableView.Bounds);
+			return Height(dvc.TableView.Bounds);
 		}
 		
 		protected virtual void ElementUnassignedFromView(UITableViewCell old_cell_view)

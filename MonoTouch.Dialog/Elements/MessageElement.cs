@@ -178,7 +178,7 @@ namespace MonoTouch.Dialog {
 			return cell;
 		}
 		
-		public nfloat GetHeight (UITableView tableView, NSIndexPath indexPath)
+		public nfloat GetHeight (DialogViewController dvc, NSIndexPath indexPath)
 		{
 			return 78;
 		}

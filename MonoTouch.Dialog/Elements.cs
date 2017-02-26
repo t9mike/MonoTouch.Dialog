@@ -849,6 +849,9 @@ namespace MonoTouch.Dialog
 	public partial class StyledStringElement : StringElement, IImageUpdated, IColorizeBackground {
 		static NSString [] skey = { new NSString (".1"), new NSString (".2"), new NSString (".3"), new NSString (".4") };
 		
+        public static UIFont DefaultCaptionFont = UIFont.BoldSystemFontOfSize(17);
+        public static UIFont DefaultSubtitleFont = UIFont.BoldSystemFontOfSize(14);
+
 		public StyledStringElement (string caption) : base (caption) {}
 		public StyledStringElement (string caption, NSAction tapped) : base (caption, tapped) {}
 		public StyledStringElement (string caption, string value) : base (caption, value) 
@@ -976,7 +979,7 @@ namespace MonoTouch.Dialog
 			tl.Text = Caption;
 			tl.TextAlignment = Alignment;
 			tl.TextColor = TextColor ?? DialogViewController.TextColor;
-			tl.Font = Font ?? UIFont.BoldSystemFontOfSize (17);
+            tl.Font = Font ?? DefaultCaptionFont;
 			tl.LineBreakMode = LineBreakMode;
 			tl.Lines = Lines;	
 			
@@ -1007,7 +1010,7 @@ namespace MonoTouch.Dialog
 			if (cell.DetailTextLabel != null){
 				cell.DetailTextLabel.Lines = Lines;
 				cell.DetailTextLabel.LineBreakMode = LineBreakMode;
-				cell.DetailTextLabel.Font = SubtitleFont ?? UIFont.SystemFontOfSize (14);
+                cell.DetailTextLabel.Font = SubtitleFont ?? DefaultSubtitleFont;
 				cell.DetailTextLabel.TextColor = (extraInfo == null || extraInfo.DetailColor == null) ? UIColor.Gray : extraInfo.DetailColor;
 			}
 		}	
@@ -1133,6 +1136,7 @@ namespace MonoTouch.Dialog
 #endif
 	
 	public partial class StyledMultilineElement : StyledStringElement, IElementSizing {
+
 		public StyledMultilineElement (string caption) : base (caption) {}
 		public StyledMultilineElement (string caption, string value) : base (caption, value) {}
 		public StyledMultilineElement (string caption, NSAction tapped) : base (caption, tapped) {}
@@ -1141,10 +1145,10 @@ namespace MonoTouch.Dialog
 			this.style = style;
 		}
 
-		public virtual nfloat GetHeight (UITableView tableView, NSIndexPath indexPath)
+		public virtual nfloat GetHeight (DialogViewController dvc, NSIndexPath indexPath)
 		{
 			float margin = UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone ? 40f : 110f;
-			CGSize maxSize = new CGSize (tableView.Bounds.Width - margin, float.MaxValue);
+			CGSize maxSize = new CGSize (dvc.TableView.Bounds.Width - margin, float.MaxValue);
 			
 			if (this.Accessory != UITableViewCellAccessory.None)
 				maxSize.Width -= 20;
@@ -1155,11 +1159,11 @@ namespace MonoTouch.Dialog
 			if (String.IsNullOrEmpty (c))
 				c = " ";
 
-			var captionFont = Font ?? UIFont.BoldSystemFontOfSize (17);
+			var captionFont = Font ?? DefaultCaptionFont;
 			var height = c.StringSize (captionFont, maxSize, LineBreakMode).Height;
 			
 			if (!String.IsNullOrEmpty (v)) {
-				var subtitleFont = SubtitleFont ?? UIFont.SystemFontOfSize (14);
+				var subtitleFont = SubtitleFont ?? DefaultSubtitleFont;
 				if (this.style == UITableViewCellStyle.Subtitle) {
 					height += v.StringSize (subtitleFont, maxSize, LineBreakMode).Height;
 				} else {
@@ -1172,7 +1176,7 @@ namespace MonoTouch.Dialog
 			return height + 10;
 		}
 	}
-	
+
 	public partial class ImageStringElement : StringElement {
 		static NSString skey = new NSString ("ImageStringElement");
 		UIImage image;
@@ -1229,7 +1233,7 @@ namespace MonoTouch.Dialog
 	///   different heights
 	/// </summary>
 	public interface IElementSizing {
-		nfloat GetHeight (UITableView tableView, NSIndexPath indexPath);
+		nfloat GetHeight (DialogViewController dvc, NSIndexPath indexPath);
 	}
 	
 	/// <summary>
@@ -1265,10 +1269,10 @@ namespace MonoTouch.Dialog
 			return cell;
 		}
 		
-		public virtual nfloat GetHeight (UITableView tableView, NSIndexPath indexPath)
+		public virtual nfloat GetHeight (DialogViewController dvc, NSIndexPath indexPath)
 		{
 			float margin = UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone ? 40f : 110f;
-			CGSize size = new CGSize (tableView.Bounds.Width - margin, float.MaxValue);
+			CGSize size = new CGSize (dvc.TableView.Bounds.Width - margin, float.MaxValue);
 			UIFont font = UIFont.BoldSystemFontOfSize (17);
 			string c = Caption;
 			// ensure the (single-line) Value will be rendered inside the cell
@@ -1294,16 +1298,20 @@ namespace MonoTouch.Dialog
 		public override UITableViewCell GetCell (UITableView tv)
 		{
 			var cell = base.GetCell (tv);			
-			var root = (RootElement) Parent.Parent;
-			
-			if (!(root.group is RadioGroup))
-				throw new Exception ("The RootElement's Group is null or is not a RadioGroup");
-			
-			bool selected = RadioIdx == ((RadioGroup)(root.group)).Selected;
-			cell.Accessory = selected ? UITableViewCellAccessory.Checkmark : UITableViewCellAccessory.None;
-
+			cell.Accessory = IsSelected ? UITableViewCellAccessory.Checkmark : UITableViewCellAccessory.None;
 			return cell;
 		}
+
+        public bool IsSelected
+        {
+            get
+            {
+                var root = (RootElement)Parent.Parent;
+                if (!(root.group is RadioGroup))
+                    throw new Exception("The RootElement's Group is null or is not a RadioGroup");
+                return RadioIdx == ((RadioGroup)(root.group)).Selected;
+            }
+        }
 
 		public override void Selected (DialogViewController dvc, UITableView tableView, NSIndexPath indexPath)
 		{
@@ -2294,7 +2302,7 @@ namespace MonoTouch.Dialog
 
         private nfloat? First_Height = null;
 
-        public virtual nfloat GetHeight (UITableView tableView, NSIndexPath indexPath)
+        public virtual nfloat GetHeight (DialogViewController dvc, NSIndexPath indexPath)
 		{
             if (View == null)
                 return 0;

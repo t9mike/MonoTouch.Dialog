@@ -153,7 +153,7 @@ namespace MonoTouch.Dialog
 		const int pad = 10;
 		const int isize = 20;
 		
-		public nfloat GetHeight (UITableView tableView, NSIndexPath indexPath)
+		public nfloat GetHeight (DialogViewController dvc, NSIndexPath indexPath)
 		{
 			return Height ?? GetTextSize (Animating ? LoadingCaption : NormalCaption).Height + 2*pad;
 		}
