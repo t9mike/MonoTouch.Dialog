@@ -2241,26 +2241,33 @@ namespace MonoTouch.Dialog
 		/// </param>
 		public UIViewElement (string caption, UIView view, bool transparent, UIEdgeInsets insets) : base (caption) 
 		{
-			this.insets = insets;
-			var oframe = view.Frame;
-			var frame = oframe;
-			frame.Width += insets.Left + insets.Right;
-			frame.Height += insets.Top + insets.Bottom;
-
-			ContainerView = new UIView (frame);
-			if ((Flags & CellFlags.Transparent) != 0)
-				ContainerView.BackgroundColor = UIColor.Clear;
-
-			if (insets.Left != 0 || insets.Top != 0)
-				view.Frame = new CGRect (insets.Left + frame.X, insets.Top + frame.Y, frame.Width, frame.Height);
-
-			ContainerView.AddSubview (view);
-			this.View = view;
-			this.Flags = transparent ? CellFlags.Transparent : 0;
-			key = new NSString ("UIViewElement" + count++);
 		}
 
-        public UIViewElement() : this("", null, false)
+        protected void Construct(UIView view, bool transparent, UIEdgeInsets insets)
+        {
+            this.insets = insets;
+            var oframe = view.Frame;
+            var frame = oframe;
+            frame.Width += insets.Left + insets.Right;
+            frame.Height += insets.Top + insets.Bottom;
+
+            ContainerView = new UIView (frame);
+            if ((Flags & CellFlags.Transparent) != 0)
+                ContainerView.BackgroundColor = UIColor.Clear;
+
+            if (insets.Left != 0 || insets.Top != 0)
+                view.Frame = new CGRect (insets.Left + frame.X, insets.Top + frame.Y, frame.Width, frame.Height);
+
+            ContainerView.AddSubview (view);
+            this.View = view;
+            this.Flags = transparent ? CellFlags.Transparent : 0;
+            key = new NSString ("UIViewElement" + count++);
+        }
+
+        /// <summary>
+        /// Call Construct() manually if you use this version.
+        /// </summary>
+        public UIViewElement(string caption) : base(caption)
         {
         }
 		
@@ -2357,6 +2364,11 @@ namespace MonoTouch.Dialog
 		/// </summary>
 		public Section () : base (null) {}
 		
+        public Section (IEnumerable<Element> elements) : this()
+        {
+            AddAll(elements);
+        }
+
 		/// <summary>
 		///  Constructs a Section with the specified header
 		/// </summary>
