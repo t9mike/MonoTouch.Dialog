@@ -964,15 +964,20 @@ namespace MonoTouch.Dialog
 			var key = GetKey ((int) style);
 			var cell = tv.DequeueReusableCell (key);
 			if (cell == null){
-				cell = new UITableViewCell (style, key);
+				cell = Create_Cell(style, key);
 				// mmuegel: should only set SelectionStyle to Blue if there is an event wired up
 				cell.SelectionStyle = (HasTapListener && HighlightIfHasTapListener) ? UITableViewCellSelectionStyle.Blue : UITableViewCellSelectionStyle.None;
 			}
 			PrepareCell (cell);
 			return cell;
 		}
-		
-		protected void PrepareCell (UITableViewCell cell)
+
+        protected virtual UITableViewCell Create_Cell(UITableViewCellStyle style, string reuseIdentifier)
+        {
+            return new UITableViewCell(style, reuseIdentifier);
+        }
+
+        protected void PrepareCell (UITableViewCell cell)
 		{
 			cell.Accessory = Accessory;
 			var tl = cell.TextLabel;
