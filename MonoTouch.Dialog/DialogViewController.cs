@@ -432,10 +432,17 @@ namespace MonoTouch.Dialog
 			public override UIView GetViewForFooter (UITableView tableView, nint sectionIdx)
 			{
 				var section = Root.Sections [(int) sectionIdx];
-				return section.FooterView;
+                return section.FooterView;
 			}
-			
-			public override nfloat GetHeightForFooter (UITableView tableView, nint sectionIdx)
+
+            public override void WillDisplayFooterView(UITableView tableView, UIView footerView, nint section)
+            {
+                var view = (UITableViewHeaderFooterView)footerView;
+                view.BackgroundView.BackgroundColor = UIColor.Clear;
+                //view.TextLabel.TextColor = UIColor.Red;
+            }
+
+            public override nfloat GetHeightForFooter (UITableView tableView, nint sectionIdx)
 			{
 				var section = Root.Sections [(int) sectionIdx];
 				if (section.FooterView == null)
