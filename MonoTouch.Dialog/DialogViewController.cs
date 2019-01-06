@@ -440,6 +440,7 @@ namespace MonoTouch.Dialog
                 var view = (UITableViewHeaderFooterView)footerView;
                 view.BackgroundView.BackgroundColor = UIColor.Clear;
                 //view.TextLabel.TextColor = UIColor.Red;
+                view.TextLabel.TextColor = UIColor.FromRGB(0.75f, 0.75f, 0.75f);
             }
 
             public override nfloat GetHeightForFooter (UITableView tableView, nint sectionIdx)
