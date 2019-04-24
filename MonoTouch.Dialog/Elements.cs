@@ -686,8 +686,9 @@ namespace MonoTouch.Dialog
 				cell.SelectionStyle = UITableViewCellSelectionStyle.Blue;
                 cell.BackgroundColor = UIColor.Clear;
                 cell.TextLabel.TextColor = DialogViewController.TextColor;
+                DialogViewController.CustomizeCellAfterConstruction(cell);
             }
-			cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
+            cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
 			
 			cell.TextLabel.Text = Caption;
 			return cell;
