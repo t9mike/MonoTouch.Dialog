@@ -367,7 +367,8 @@ namespace MonoTouch.Dialog
 			var cell = tv.DequeueReusableCell (CellKey);
 			if (cell == null){
 				cell = new UITableViewCell (UITableViewCellStyle.Default, CellKey);
-				cell.BackgroundColor = UIColor.Clear;
+                cell.TextLabel.TextColor = DialogViewController.TextColor;
+                cell.BackgroundColor = UIColor.Clear;
 				cell.SelectionStyle = UITableViewCellSelectionStyle.None;
 			} else
 				RemoveTag (cell, 1);
@@ -777,7 +778,8 @@ namespace MonoTouch.Dialog
 		static NSString skey = new NSString ("StringElement");
 		static NSString skeyvalue = new NSString ("StringElementValue");
 		public UITextAlignment Alignment = UITextAlignment.Left;
-		public string Value;
+        public UITableViewCellAccessory Accessory = UITableViewCellAccessory.None;
+        public string Value;
 		public bool DeselectAfterTapHandled = true;
 		
 		public StringElement (string caption) : base (caption) {}
@@ -810,7 +812,7 @@ namespace MonoTouch.Dialog
 				cell.BackgroundColor = UIColor.Clear;
 				cell.SelectionStyle = (HasTapListener && HighlightIfHasTapListener) ? UITableViewCellSelectionStyle.Blue : UITableViewCellSelectionStyle.None;
 			}
-			cell.Accessory = UITableViewCellAccessory.None;
+			cell.Accessory = Accessory;
 			cell.TextLabel.Text = Caption;
 			cell.TextLabel.TextAlignment = Alignment;
             cell.TextLabel.TextColor = DialogViewController.TextColor;

@@ -53,7 +53,7 @@ namespace MonoTouch.Dialog
 		UISearchBar searchBar;
 		UITableView tableView;
 		protected RefreshTableHeaderView refreshView;
-		RootElement root;
+		protected RootElement root;
 		bool pushing;
 		bool dirty;
 		bool reloading;
