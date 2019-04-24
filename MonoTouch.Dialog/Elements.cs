@@ -684,7 +684,9 @@ namespace MonoTouch.Dialog
 			if (cell == null){
 				cell = new UITableViewCell (UITableViewCellStyle.Default, CellKey);
 				cell.SelectionStyle = UITableViewCellSelectionStyle.Blue;
-			}
+                cell.BackgroundColor = UIColor.Clear;
+                cell.TextLabel.TextColor = DialogViewController.TextColor;
+            }
 			cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
 			
 			cell.TextLabel.Text = Caption;
