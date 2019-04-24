@@ -813,7 +813,8 @@ namespace MonoTouch.Dialog
                 cell = new UITableViewCell (Value == null ? UITableViewCellStyle.Default : UITableViewCellStyle.Value1, Value == null ? skey : skeyvalue);
 				cell.BackgroundColor = UIColor.Clear;
 				cell.SelectionStyle = (HasTapListener && HighlightIfHasTapListener) ? UITableViewCellSelectionStyle.Blue : UITableViewCellSelectionStyle.None;
-			}
+                DialogViewController.CustomizeCellAfterConstruction(cell);
+            }
 			cell.Accessory = Accessory;
 			cell.TextLabel.Text = Caption;
 			cell.TextLabel.TextAlignment = Alignment;

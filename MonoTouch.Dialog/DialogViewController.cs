@@ -43,18 +43,15 @@ namespace MonoTouch.Dialog
 	/// </summary>
 	public class DialogViewController : UITableViewController
 	{
-        /// <summary>
-        /// Default text color.
-        /// </summary>
+        // Global styling
         public static UIColor TextColor = UIColor.Black;
-
         public static UIColor TextColorHeader = UIColor.Black;
         public static UIColor TextColorFooter = UIColor.FromRGB(0.75f, 0.75f, 0.75f);
-
         public static UIFont TextFontHeader = null;
         public static UIFont TextFontFooter = null;
+        public static UIColor SelectedBackgroundColor = null;
 
-		public UITableViewStyle Style = UITableViewStyle.Grouped;
+        public UITableViewStyle Style = UITableViewStyle.Grouped;
 		public event Action<NSIndexPath> OnSelection;
 		UISearchBar searchBar;
 		UITableView tableView;
@@ -834,5 +831,15 @@ namespace MonoTouch.Dialog
         {
         }
 
-	}
+        internal static void CustomizeCellAfterConstruction(UITableViewCell cell)
+        {
+            if (DialogViewController.SelectedBackgroundColor != null)
+            {
+                cell.SelectedBackgroundView = new UIView
+                {
+                    BackgroundColor = DialogViewController.SelectedBackgroundColor
+                };
+            }
+        }
+    }
 }
