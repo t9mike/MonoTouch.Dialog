@@ -48,6 +48,12 @@ namespace MonoTouch.Dialog
         /// </summary>
         public static UIColor TextColor = UIColor.Black;
 
+        public static UIColor TextColorHeader = UIColor.Black;
+        public static UIColor TextColorFooter = UIColor.FromRGB(0.75f, 0.75f, 0.75f);
+
+        public static UIFont TextFontHeader = null;
+        public static UIFont TextFontFooter = null;
+
 		public UITableViewStyle Style = UITableViewStyle.Grouped;
 		public event Action<NSIndexPath> OnSelection;
 		UISearchBar searchBar;
@@ -435,12 +441,21 @@ namespace MonoTouch.Dialog
                 return section.FooterView;
 			}
 
+            public override void WillDisplayHeaderView(UITableView tableView, UIView headerView, nint section)
+            {
+                var view = (UITableViewHeaderFooterView)headerView;
+                view.TextLabel.TextColor = TextColorHeader;
+                if (TextFontHeader != null)
+                    view.TextLabel.Font = TextFontHeader;
+            }
+
             public override void WillDisplayFooterView(UITableView tableView, UIView footerView, nint section)
             {
                 var view = (UITableViewHeaderFooterView)footerView;
                 view.BackgroundView.BackgroundColor = UIColor.Clear;
-                //view.TextLabel.TextColor = UIColor.Red;
-                view.TextLabel.TextColor = UIColor.FromRGB(0.75f, 0.75f, 0.75f);
+                view.TextLabel.TextColor = TextColorFooter;
+                if (TextFontFooter != null)
+                    view.TextLabel.Font = TextFontFooter;
             }
 
             public override nfloat GetHeightForFooter (UITableView tableView, nint sectionIdx)
