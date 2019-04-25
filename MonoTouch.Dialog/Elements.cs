@@ -646,6 +646,7 @@ namespace MonoTouch.Dialog
 	/// </summary>
 	public partial class HtmlElement : Element {
 		NSUrl nsUrl;
+        public UIColor WebBackgroundColor = UIColor.White;
 		static NSString hkey = new NSString ("HtmlElement");
 #if !__TVOS__
 		// There is no UIWebView in tvOS, so we can't launch anything.
@@ -732,7 +733,8 @@ namespace MonoTouch.Dialog
 			};
 
 			web = new UIWebView (UIScreen.MainScreen.Bounds) {
-				BackgroundColor = UIColor.Clear,
+				BackgroundColor = WebBackgroundColor,
+                Opaque = false,
 				ScalesPageToFit = true,
 				AutoresizingMask = UIViewAutoresizing.All
 			};
