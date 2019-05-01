@@ -391,6 +391,8 @@ namespace MonoTouch.Dialog
 
                 Container.CustomizeCell(tableView, indexPath, section, element, cell);
 
+                cell.Hidden = element.Hidden;
+
                 return cell;
             }
 			
@@ -519,7 +521,10 @@ namespace MonoTouch.Dialog
 			{
 				var section = Root.Sections [(int) indexPath.Section];
 				var element = section.Elements [(int) indexPath.Row];
-				
+
+                if (element.Hidden)
+                    return 0;
+
 				var sizable = element as IElementSizing;
 				if (sizable == null)
 					return (nfloat)tableView.RowHeight;                

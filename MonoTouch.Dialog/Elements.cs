@@ -104,6 +104,13 @@ namespace MonoTouch.Dialog
         }
         private string _Accessibility_Hint = null;
 
+        public bool Hidden = false;
+        public bool Shown
+        {
+            get { return !Hidden; }
+            set { Hidden = !value; }
+        }
+
         public virtual UIAccessibilityTrait? Accessibility_Traits
         {
             get { return _Accessibility_Traits; }
@@ -248,7 +255,8 @@ namespace MonoTouch.Dialog
 			var path = IndexPath;
 			if (path == null)
 				return null;
-			return tv.CellAt (path);
+			var cell = tv.CellAt (path);
+            return cell;
 		}
 		
         /// <summary>
@@ -2951,7 +2959,7 @@ namespace MonoTouch.Dialog
 					var re = e as RadioElement;
 					if (re != null)
 						re.RadioIdx = current++;
-					if (UnevenRows == false && e is IElementSizing)
+					if (UnevenRows == false && (e is IElementSizing) || e.Hidden)
 						UnevenRows = true;
 					if (NeedColorUpdate == false && e is IColorizeBackground)
 						NeedColorUpdate = true;
