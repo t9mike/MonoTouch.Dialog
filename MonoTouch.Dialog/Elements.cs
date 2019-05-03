@@ -342,6 +342,19 @@ namespace MonoTouch.Dialog
 		static NSString bkey = new NSString ("BooleanElement");
 #if !__TVOS__
 		protected UISwitch sw;
+        protected bool _Enabled = true;
+        public bool Enabled
+        {
+            get => _Enabled;
+            set
+            {
+                _Enabled = value;
+                if (sw != null)
+                {
+                    sw.Enabled = value;
+                }
+            }
+        }
 #endif // !__TVOS__
 						
 		public BooleanElement (string caption, bool value) : base (caption, value)
@@ -364,7 +377,8 @@ namespace MonoTouch.Dialog
 				sw = new UISwitch (){
 					BackgroundColor = UIColor.Clear,
 					Tag = 1,
-					On = Value
+					On = Value,
+                    Enabled = Enabled
 				};
 				sw.AddTarget (delegate {
 					Value = sw.On;
