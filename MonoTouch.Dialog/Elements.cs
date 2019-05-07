@@ -663,11 +663,23 @@ namespace MonoTouch.Dialog
 		}		
 	}
 
-	/// <summary>
-	///  Used to display a cell that will launch a web browser when selected.
-	/// </summary>
-	public partial class HtmlElement : Element {
+    /// <summary>
+    /// Define one of Url or Html to load in the Webview. If neight, will
+    /// be black.
+    /// </summary>
+    public class HtmlElementOpts
+    {
+        public string Url;
+        public string Html;
+        public string HtmlBaseUrl;
+    }
+
+    /// <summary>
+    ///  Used to display a cell that will launch a web browser when selected.
+    /// </summary>
+    public partial class HtmlElement : Element {
 		NSUrl nsUrl;
+        Func<HtmlElementOpts> getOptsCallback;
         public UIColor WebBackgroundColor = UIColor.White;
 		static NSString hkey = new NSString ("HtmlElement");
 #if !__TVOS__
@@ -684,8 +696,13 @@ namespace MonoTouch.Dialog
 		{
 			nsUrl = url;
 		}
-		
-		protected override NSString CellKey {
+
+        public HtmlElement(string caption, Func<HtmlElementOpts> get_opts_callback) : base(caption)
+        {
+            getOptsCallback = get_opts_callback;
+        }
+
+        protected override NSString CellKey {
 			get {
 				return hkey;
 			}
@@ -792,8 +809,27 @@ namespace MonoTouch.Dialog
 			vc.View.AddSubview (web);
 			
 			dvc.ActivateController (vc);
-			web.LoadRequest (NSUrlRequest.FromUrl (nsUrl));
-		}
+
+            if (getOptsCallback != null)
+            {
+                var opts = getOptsCallback();
+                if (!String.IsNullOrWhiteSpace(opts.Url))
+                {
+                    web.LoadRequest(NSUrlRequest.FromUrl(new NSUrl(opts.Url)));
+                }
+                else
+                {
+                    var baseUrl = String.IsNullOrEmpty(opts.HtmlBaseUrl)
+                        ? null
+                        : new NSUrl(opts.HtmlBaseUrl);
+                    web.LoadHtmlString(opts.Html, baseUrl);
+                }
+            }
+            else
+            {
+                web.LoadRequest(NSUrlRequest.FromUrl(nsUrl));
+            }
+        }
 #endif // !__TVOS__
 	}
 
