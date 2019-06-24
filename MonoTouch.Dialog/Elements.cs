@@ -1,4 +1,4 @@
-//
+﻿//
 // Elements.cs: defines the various components of our view
 //
 // Author:
@@ -356,8 +356,29 @@ namespace MonoTouch.Dialog
             }
         }
 #endif // !__TVOS__
-						
-		public BooleanElement (string caption, bool value) : base (caption, value)
+
+        /// <summary>
+        /// The caption font for this given element. Ignore if null.
+        /// !!!!!NOT TESTED!!!!!
+        /// </summary>
+        public UIFont Font
+        {
+            get { return font; }
+            set
+            {
+                font = value;
+                if (value == null) return;
+                var cell = GetActiveCell() as UITableViewCell;
+                if (cell != null)
+                {
+                    cell.TextLabel.Font = value;
+                    this.GetContainerTableView().ReloadData();
+                }
+            }
+        }
+        UIFont font;
+
+        public BooleanElement (string caption, bool value) : base (caption, value)
 		{  }
 		
 		public BooleanElement (string caption, bool value, string key) : base (caption, value)
@@ -368,6 +389,7 @@ namespace MonoTouch.Dialog
 				return bkey;
 			}
 		}
+
 		public override UITableViewCell GetCell (UITableView tv)
 		{
 #if __TVOS__
@@ -390,16 +412,27 @@ namespace MonoTouch.Dialog
 			if (cell == null){
 				cell = new UITableViewCell (UITableViewCellStyle.Default, CellKey);
                 cell.TextLabel.TextColor = DialogViewController.TextColor;
+                if (font != null)
+                    cell.TextLabel.Font = font;
                 cell.BackgroundColor = UIColor.Clear;
 				cell.SelectionStyle = UITableViewCellSelectionStyle.None;
 			} else
 				RemoveTag (cell, 1);
 		
 			cell.TextLabel.Text = Caption;
-			cell.AccessoryView = sw;
+            if (Font != null)
+                cell.TextLabel.Font = Font;
+            cell.AccessoryView = CreateAccessoryView(cell, sw);
 #endif // !__TVOS__
 			return cell;
 		}
+
+#if __IOS__
+        protected virtual UIView CreateAccessoryView(UITableViewCell cell, UISwitch sw)
+        {
+            return sw;
+        }
+#endif
 
 #if __TVOS__
 		UITableViewCell ConfigCell (UITableViewCell cell)
@@ -418,7 +451,7 @@ namespace MonoTouch.Dialog
 		}
 #endif // !__TVOS__
 
-		protected override void Dispose (bool disposing)
+        protected override void Dispose (bool disposing)
 		{
 			if (disposing){
 #if !__TVOS__
