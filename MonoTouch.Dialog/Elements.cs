@@ -1066,8 +1066,9 @@ namespace MonoTouch.Dialog
 				cell = Create_Cell(style, key);
 				// mmuegel: should only set SelectionStyle to Blue if there is an event wired up
 				cell.SelectionStyle = (HasTapListener && HighlightIfHasTapListener) ? UITableViewCellSelectionStyle.Blue : UITableViewCellSelectionStyle.None;
-			}
-			PrepareCell (cell);
+                DialogViewController.CustomizeCellAfterConstruction(cell);
+            }
+            PrepareCell (cell);
 			return cell;
 		}
 
