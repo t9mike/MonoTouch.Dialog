@@ -2004,7 +2004,14 @@ namespace MonoTouch.Dialog
 					} else
 						entry.ReturnKeyType = returnKeyType.Value;
 					
-					tv.ScrollToRow (IndexPath, UITableViewScrollPosition.Middle, true);
+                    try
+                    {
+                        tv.ScrollToRow(IndexPath, UITableViewScrollPosition.Middle, true);
+                    }
+                    catch
+                    {
+                        // Silenty ignore this error
+                    }
 				};
 				cell.ContentView.AddSubview (entry);
 			} else
@@ -2074,8 +2081,16 @@ namespace MonoTouch.Dialog
 			var tv = GetContainerTableView ();
 			if (tv == null)
 				return;
-			tv.ScrollToRow (IndexPath, UITableViewScrollPosition.Middle, animated);
-			if (entry != null){
+            try
+            {
+                tv.ScrollToRow(IndexPath, UITableViewScrollPosition.Middle, animated);
+            }
+            catch
+            {
+                // Ignore this error
+            }
+
+            if (entry != null){
 				entry.BecomeFirstResponder ();
 				becomeResponder = false;
 			}
@@ -2087,7 +2102,14 @@ namespace MonoTouch.Dialog
 			var tv = GetContainerTableView ();
 			if (tv == null)
 				return;
-			tv.ScrollToRow (IndexPath, UITableViewScrollPosition.Middle, animated);
+            try
+            {
+                tv.ScrollToRow(IndexPath, UITableViewScrollPosition.Middle, animated);
+            }
+            catch
+            {
+                // Ignore this error
+            }
 			if (entry != null)
 				entry.ResignFirstResponder ();
 		}
