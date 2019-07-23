@@ -10,6 +10,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchArch>i386, x86_64</MtouchArch>
+    <MtouchProfiling>true</MtouchProfiling>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Xamarin.iOS" />
