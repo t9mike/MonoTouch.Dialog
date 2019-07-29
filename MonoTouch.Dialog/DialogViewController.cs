@@ -57,7 +57,7 @@ namespace MonoTouch.Dialog
 		UITableView tableView;
 		protected RefreshTableHeaderView refreshView;
 		protected RootElement root;
-		bool pushing;
+		protected bool pushing;
 		bool dirty;
 		bool reloading;
 
@@ -555,6 +555,7 @@ namespace MonoTouch.Dialog
                     if (!String.IsNullOrEmpty(title))
                         NavigationItem.Title = title;
                 }
+
                 nav.PushViewController(controller, true);
             }
 			else {
