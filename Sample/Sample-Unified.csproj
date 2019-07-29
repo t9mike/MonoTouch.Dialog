@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <XIPlatform>tvOS</XIPlatform>
@@ -19,12 +19,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Json" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MonoTouch.Dialog\MonoTouch.Dialog-Unified.csproj">
-      <Project>{2B7FBE6D-3AD0-4805-9E09-4EBA09C0932C}</Project>
-      <Name>MonoTouch.Dialog-Unified</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -55,6 +49,12 @@
     <Content Include="favorited.png" />
     <Content Include="background.png" />
     <Content Include="sample.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MonoTouch.Dialog\MonoTouch.Dialog.iOS.csproj">
+      <Project>{e2f481af-68cd-42b1-85f0-d089c7de86c4}</Project>
+      <Name>MonoTouch.Dialog.iOS</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="Sample.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoTouch.Dialog.unified", "MonoTouch.Dialog.unified.csproj", "{3FFBFFF8-5560-4EDE-82E5-3FFDFBBA8A50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample-Unified", "..\Sample\Sample-Unified.csproj", "{34FD9A81-12D2-44BB-897B-C051590A75AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|iPhoneSimulator = Debug|iPhoneSimulator
@@ -31,5 +33,21 @@ Global
 		{3FFBFFF8-5560-4EDE-82E5-3FFDFBBA8A50}.Release|iPhone.Build.0 = Release|iPhone
 		{3FFBFFF8-5560-4EDE-82E5-3FFDFBBA8A50}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{3FFBFFF8-5560-4EDE-82E5-3FFDFBBA8A50}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{34FD9A81-12D2-44BB-897B-C051590A75AB}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{34FD9A81-12D2-44BB-897B-C051590A75AB}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{34FD9A81-12D2-44BB-897B-C051590A75AB}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{34FD9A81-12D2-44BB-897B-C051590A75AB}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{34FD9A81-12D2-44BB-897B-C051590A75AB}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{34FD9A81-12D2-44BB-897B-C051590A75AB}.Debug|iPhone.Build.0 = Debug|iPhone
+		{34FD9A81-12D2-44BB-897B-C051590A75AB}.Release|iPhone.ActiveCfg = Release|iPhone
+		{34FD9A81-12D2-44BB-897B-C051590A75AB}.Release|iPhone.Build.0 = Release|iPhone
+		{34FD9A81-12D2-44BB-897B-C051590A75AB}.AdHoc|iPhone.ActiveCfg = Debug|iPhone
+		{34FD9A81-12D2-44BB-897B-C051590A75AB}.AdHoc|iPhone.Build.0 = Debug|iPhone
+		{34FD9A81-12D2-44BB-897B-C051590A75AB}.AppStore|iPhone.ActiveCfg = Debug|iPhone
+		{34FD9A81-12D2-44BB-897B-C051590A75AB}.AppStore|iPhone.Build.0 = Debug|iPhone
+		{34FD9A81-12D2-44BB-897B-C051590A75AB}.AdHoc|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{34FD9A81-12D2-44BB-897B-C051590A75AB}.AdHoc|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{34FD9A81-12D2-44BB-897B-C051590A75AB}.AppStore|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{34FD9A81-12D2-44BB-897B-C051590A75AB}.AppStore|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
 	EndGlobalSection
 EndGlobal
