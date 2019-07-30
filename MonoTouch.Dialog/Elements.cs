@@ -1389,7 +1389,7 @@ namespace MonoTouch.Dialog
 	
     public partial class RadioElement : StyledStringElement {
 		public string Group;
-		internal int RadioIdx;
+		public int RadioIdx { get; internal set; }
 		
 		public RadioElement (string caption, string group) : base (caption)
 		{
@@ -1407,15 +1407,21 @@ namespace MonoTouch.Dialog
 			return cell;
 		}
 
+		protected RadioGroup RadioGroup
+		{
+			get
+			{
+				var root = (RootElement)Parent.Parent;
+				var radioGroup = root.group as RadioGroup;
+				if (radioGroup == null)
+					throw new Exception("The RootElement's Group is null or is not a RadioGroup");
+				return radioGroup;
+			}
+		}
         public bool IsSelected
         {
-            get
-            {
-                var root = (RootElement)Parent.Parent;
-                if (!(root.group is RadioGroup))
-                    throw new Exception("The RootElement's Group is null or is not a RadioGroup");
-                return RadioIdx == ((RadioGroup)(root.group)).Selected;
-            }
+            get { return RadioIdx == RadioGroup.Selected; }
+			set { RadioGroup.Selected = RadioIdx; }
         }
 
 		public override void Selected (DialogViewController dvc, UITableView tableView, NSIndexPath indexPath)
@@ -3275,6 +3281,11 @@ namespace MonoTouch.Dialog
 					radio.Selected = value;
 			}
 		}
+
+		protected virtual int SelectedRadioGroup(RadioGroup radio)
+		{
+			return radio.Selected;
+		}
 		
 		public override UITableViewCell GetCell (UITableView tv)
 		{
@@ -3290,7 +3301,7 @@ namespace MonoTouch.Dialog
 			cell.TextLabel.Text = Caption;
 			var radio = group as RadioGroup;
 			if (radio != null){
-				int selected = radio.Selected;
+				int selected = SelectedRadioGroup(radio);
 				int current = 0;
 				
 				foreach (var s in Sections){
