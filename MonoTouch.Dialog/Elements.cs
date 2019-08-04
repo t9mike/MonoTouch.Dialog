@@ -1407,7 +1407,7 @@ namespace MonoTouch.Dialog
 			return cell;
 		}
 
-		protected RadioGroup RadioGroup
+		protected virtual RadioGroup RadioGroup
 		{
 			get
 			{
