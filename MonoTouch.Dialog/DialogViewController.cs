@@ -820,7 +820,7 @@ namespace MonoTouch.Dialog
             ClearsSelectionOnViewWillAppear = false;
         }
 		
-		public virtual DialogViewController MakeDialogViewController(RootElement root, bool pushing)
+		public virtual UIViewController MakeDialogViewController(RootElement root, bool pushing)
 		{
             return new DialogViewController(root, pushing) { 
                 Autorotate = true, 
