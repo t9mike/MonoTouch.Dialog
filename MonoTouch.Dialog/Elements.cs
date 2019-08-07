@@ -418,7 +418,8 @@ namespace MonoTouch.Dialog
 				cell.SelectionStyle = UITableViewCellSelectionStyle.None;
 			} else
 				RemoveTag (cell, 1);
-		
+
+			cell.TextLabel.Lines = 3;
 			cell.TextLabel.Text = Caption;
             if (Font != null)
                 cell.TextLabel.Font = Font;
@@ -430,7 +431,12 @@ namespace MonoTouch.Dialog
 #if __IOS__
         protected virtual UIView CreateAccessoryView(UITableViewCell cell, UISwitch sw)
         {
-            return sw;
+			var view = new UIView();
+			float padding = 10;
+			view.Frame = new CGRect(0, 0, sw.Frame.Width+padding, sw.Frame.Height);
+			sw.Frame = new CGRect(padding, 0, sw.Frame.Width, sw.Frame.Height);
+			view.Add(sw);
+            return view;
         }
 #endif
 
