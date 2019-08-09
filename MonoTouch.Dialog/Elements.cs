@@ -1415,7 +1415,7 @@ namespace MonoTouch.Dialog
 		private void ConfigCell(UITableViewCell cell)
 		{
 			cell.UserInteractionEnabled = Enabled;
-			cell.ContentView.Alpha = 0.5f;
+			cell.ContentView.Alpha = Enabled ? 1.0f : 0.5f;
 		}
 
 		public RadioElement (string caption, string group) : base (caption)
