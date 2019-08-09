@@ -1397,6 +1397,27 @@ namespace MonoTouch.Dialog
 		public string Group;
 		public int RadioIdx { get; internal set; }
 		
+		protected bool _Enabled = true;
+		public bool Enabled
+		{
+			get => _Enabled;
+			set
+			{
+				_Enabled = value;
+				var cell = GetActiveCell();
+				if (cell != null)
+				{
+					ConfigCell(cell);
+				}
+			}
+		}
+
+		private void ConfigCell(UITableViewCell cell)
+		{
+			cell.UserInteractionEnabled = Enabled;
+			cell.ContentView.Alpha = 0.5f;
+		}
+
 		public RadioElement (string caption, string group) : base (caption)
 		{
 			Group = group;
@@ -1410,6 +1431,7 @@ namespace MonoTouch.Dialog
 		{
 			var cell = base.GetCell (tv);			
 			cell.Accessory = IsSelected ? UITableViewCellAccessory.Checkmark : UITableViewCellAccessory.None;
+			ConfigCell(cell);
 			return cell;
 		}
 
