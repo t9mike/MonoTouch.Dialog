@@ -425,8 +425,13 @@ namespace MonoTouch.Dialog
                 cell.TextLabel.Font = Font;
             cell.AccessoryView = CreateAccessoryView(cell, sw);
 #endif // !__TVOS__
-			return cell;
+            CellCreated(cell);
+            return cell;
 		}
+
+        protected virtual void CellCreated(UITableViewCell cell)
+        {
+        }
 
 #if __IOS__
         protected virtual UIView CreateAccessoryView(UITableViewCell cell, UISwitch sw)
