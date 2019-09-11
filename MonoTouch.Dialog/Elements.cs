@@ -86,21 +86,45 @@ namespace MonoTouch.Dialog
         public virtual bool Is_Accessible
         {
             get { return _Is_Accessible; }
-            set { _Is_Accessible = value; }
+            set
+            {
+                _Is_Accessible = value;
+                var cell = GetActiveCell();
+                if (cell != null)
+                {
+                    cell.IsAccessibilityElement = value;
+                }
+            }
         }
         private bool _Is_Accessible = true;
 
         public virtual string Accessibility_Label
         {
             get { return _Accessibility_Label; }
-            set { _Accessibility_Label = value; }
+            set
+            {
+                _Accessibility_Label = value;
+                var cell = GetActiveCell();
+                if (cell != null)
+                {
+                    cell.AccessibilityLabel = value;
+                }
+            }
         }
         private string _Accessibility_Label;
 
         public virtual string Accessibility_Hint
         {
             get { return _Accessibility_Hint; }
-            set { _Accessibility_Hint = value; }
+            set
+            {
+                _Accessibility_Hint = value;
+                var cell = GetActiveCell();
+                if (cell != null)
+                {
+                    cell.AccessibilityHint = value;
+                }
+            }
         }
         private string _Accessibility_Hint = null;
 
@@ -114,7 +138,15 @@ namespace MonoTouch.Dialog
         public virtual UIAccessibilityTrait? Accessibility_Traits
         {
             get { return _Accessibility_Traits; }
-            set { _Accessibility_Traits = value; }
+            set
+            {
+                _Accessibility_Traits = value;
+                var cell = GetActiveCell();
+                if (cell != null && value != null)
+                {
+                    cell.AccessibilityTraits = value.Value;
+                }
+            }
         }
         private UIAccessibilityTrait? _Accessibility_Traits = null;
 
