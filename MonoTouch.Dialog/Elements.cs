@@ -334,14 +334,14 @@ namespace MonoTouch.Dialog
 			return val ? "On".GetText () : "Off".GetText ();
 		}		
 	}
-	
-	/// <summary>
-	/// Used to display switch on the screen.
-	/// </summary>
-	public partial class BooleanElement : BoolElement {
-		static NSString bkey = new NSString ("BooleanElement");
+
+    /// <summary>
+    /// Used to display switch on the screen.
+    /// </summary>
+    public partial class BooleanElement : BoolElement {
+        static NSString bkey = new NSString("BooleanElement");
 #if !__TVOS__
-		protected UISwitch sw;
+        protected UISwitch sw;
         protected bool _Enabled = true;
         public bool Enabled
         {
@@ -378,70 +378,67 @@ namespace MonoTouch.Dialog
         }
         UIFont font;
 
-        public BooleanElement (string caption, bool value) : base (caption, value)
-		{  }
-		
-		public BooleanElement (string caption, bool value, string key) : base (caption, value)
-		{  }
-		
-		protected override NSString CellKey {
-			get {
-				return bkey;
-			}
-		}
+        public BooleanElement(string caption, bool value) : base(caption, value)
+        { }
 
-		public override UITableViewCell GetCell (UITableView tv)
-		{
+        public BooleanElement(string caption, bool value, string key) : base(caption, value)
+        { }
+
+        protected override NSString CellKey {
+            get {
+                return bkey;
+            }
+        }
+
+        public override UITableViewCell GetCell(UITableView tv)
+        {
 #if __TVOS__
 			var cell = ConfigCell (base.GetCell (tv));
 #else
-			if (sw == null){
-				sw = new UISwitch (){
-					BackgroundColor = UIColor.Clear,
-					Tag = 1,
-					On = Value,
+            if (sw == null) {
+                sw = new UISwitch() {
+                    BackgroundColor = UIColor.Clear,
+                    Tag = 1,
+                    On = Value,
                     Enabled = Enabled
-				};
-				sw.AddTarget (delegate {
-					Value = sw.On;
-				}, UIControlEvent.ValueChanged);
-			} else
-				sw.On = Value;
-			
-			var cell = tv.DequeueReusableCell (CellKey);
-			if (cell == null){
-				cell = new UITableViewCell (UITableViewCellStyle.Default, CellKey);
+                };
+
+                sw.AddTarget(delegate {
+                    Value = sw.On;
+                }, UIControlEvent.ValueChanged);
+            } else
+                sw.On = Value;
+
+            var cell = tv.DequeueReusableCell(CellKey);
+            if (cell == null) {
+                cell = new UITableViewCell(UITableViewCellStyle.Default, CellKey);
                 cell.TextLabel.TextColor = DialogViewController.TextColor;
                 if (font != null)
                     cell.TextLabel.Font = font;
                 cell.BackgroundColor = UIColor.Clear;
-				cell.SelectionStyle = UITableViewCellSelectionStyle.None;
-			} else
-				RemoveTag (cell, 1);
+                cell.SelectionStyle = UITableViewCellSelectionStyle.None;
+            } else
+                RemoveTag(cell, 1);
 
-			cell.TextLabel.Lines = 3;
-			cell.TextLabel.Text = Caption;
+            cell.TextLabel.Lines = 3;
+            cell.TextLabel.Text = Caption;
             if (Font != null)
                 cell.TextLabel.Font = Font;
             cell.AccessoryView = CreateAccessoryView(cell, sw);
 #endif // !__TVOS__
             CellCreated(cell);
             return cell;
-		}
+        }
 
         protected virtual void CellCreated(UITableViewCell cell)
         {
         }
 
 #if __IOS__
+
         protected virtual UIView CreateAccessoryView(UITableViewCell cell, UISwitch sw)
         {
-			var view = new UIView();
-			float padding = 10;
-			view.Frame = new CGRect(0, 0, sw.Frame.Width+padding, sw.Frame.Height);
-			sw.Frame = new CGRect(padding, 0, sw.Frame.Width, sw.Frame.Height);
-			view.Add(sw);
-            return view;
+            return sw;
         }
 #endif
 
