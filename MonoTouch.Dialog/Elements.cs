@@ -754,6 +754,7 @@ namespace MonoTouch.Dialog
 		NSUrl nsUrl;
         Func<HtmlElementOpts> getOptsCallback;
         public UIColor WebBackgroundColor = UIColor.White;
+		public UIView AccessoryView;
 		static NSString hkey = new NSString ("HtmlElement");
 #if !__TVOS__
 		// There is no UIWebView in tvOS, so we can't launch anything.
@@ -799,6 +800,7 @@ namespace MonoTouch.Dialog
 				cell.SelectionStyle = UITableViewCellSelectionStyle.Blue;
                 cell.BackgroundColor = UIColor.Clear;
                 cell.TextLabel.TextColor = DialogViewController.TextColor;
+				cell.AccessoryView = AccessoryView;
                 DialogViewController.CustomizeCellAfterConstruction(cell);
             }
             cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
@@ -1061,6 +1063,8 @@ namespace MonoTouch.Dialog
 				extraInfo.Image = null;
 			}
 		}
+
+		public UIView AccessortView;
 		
 		// Background color for the cell (alternative: BackgroundUri)
 		public UIColor BackgroundColor {
@@ -1104,6 +1108,7 @@ namespace MonoTouch.Dialog
 			var cell = tv.DequeueReusableCell (key);
 			if (cell == null){
 				cell = Create_Cell(style, key);
+				cell.AccessoryView = AccessortView;
 				// mmuegel: should only set SelectionStyle to Blue if there is an event wired up
 				cell.SelectionStyle = (HasTapListener && HighlightIfHasTapListener) ? UITableViewCellSelectionStyle.Blue : UITableViewCellSelectionStyle.None;
                 DialogViewController.CustomizeCellAfterConstruction(cell);
