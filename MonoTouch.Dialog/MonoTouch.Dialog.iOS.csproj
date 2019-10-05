@@ -79,7 +79,7 @@
     <Compile Include="DialogViewController.cs" />
     <Compile Include="Elements.cs" />
     <Compile Include="IBackButtonCaption.cs" />
-    <Compile Include="Utilities\MiscExtensions.cs" />
+    <Compile Include="Utilities\DialogExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\arrow.png" />

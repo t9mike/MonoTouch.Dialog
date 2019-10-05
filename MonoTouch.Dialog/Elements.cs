@@ -407,7 +407,7 @@ namespace MonoTouch.Dialog
                 }
             }
         }
-        UIFont font;
+        UIFont font = UIFont.SystemFontOfSize(17).Scalable();
 
         public BooleanElement(string caption, bool value) : base(caption, value)
         { }
@@ -952,14 +952,18 @@ namespace MonoTouch.Dialog
             }
 			cell.Accessory = Accessory;
 			cell.TextLabel.Text = Caption;
-			cell.TextLabel.TextAlignment = Alignment;
+            cell.TextLabel.Font = StyledStringElement.DefaultCaptionFont;
+            cell.TextLabel.TextAlignment = Alignment;
             cell.TextLabel.TextColor = DialogViewController.TextColor;
 			
 			// The check is needed because the cell might have been recycled.
 			if (cell.DetailTextLabel != null)
-				cell.DetailTextLabel.Text = Value == null ? "" : Value;
-			
-			return cell;
+            {
+                cell.DetailTextLabel.Font = StyledStringElement.DefaultCaptionFont;
+                cell.DetailTextLabel.Text = Value == null ? "" : Value;
+            }
+
+            return cell;
 		}
 
 		public override string Summary ()
