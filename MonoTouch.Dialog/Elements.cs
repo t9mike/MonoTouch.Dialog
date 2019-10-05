@@ -18,7 +18,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
-
 #if __UNIFIED__
 using UIKit;
 using CoreGraphics;
@@ -538,7 +537,7 @@ namespace MonoTouch.Dialog
 		
 		public class TextWithImageCellView : UITableViewCell {
 			const int fontSize = 17;
-			static UIFont font = UIFont.BoldSystemFontOfSize (fontSize);
+			static UIFont font = UIFont.BoldSystemFontOfSize (fontSize).Scalable();
 			BaseBooleanImageElement parent;
 			UILabel label;
 			UIButton button;
@@ -990,8 +989,8 @@ namespace MonoTouch.Dialog
 	public partial class StyledStringElement : StringElement, IImageUpdated, IColorizeBackground {
 		static NSString [] skey = { new NSString (".1"), new NSString (".2"), new NSString (".3"), new NSString (".4") };
 		
-        public static UIFont DefaultCaptionFont = UIFont.BoldSystemFontOfSize(17);
-        public static UIFont DefaultSubtitleFont = UIFont.BoldSystemFontOfSize(14);
+        public static UIFont DefaultCaptionFont = UIFont.BoldSystemFontOfSize(17).Scalable();
+        public static UIFont DefaultSubtitleFont = UIFont.BoldSystemFontOfSize(14).Scalable();
 
 		public StyledStringElement (string caption) : base (caption) {}
 		public StyledStringElement (string caption, NSAction tapped) : base (caption, tapped) {}
@@ -1423,7 +1422,7 @@ namespace MonoTouch.Dialog
 		{
 			float margin = UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone ? 40f : 110f;
 			CGSize size = new CGSize (dvc.TableView.Bounds.Width - margin, float.MaxValue);
-			UIFont font = UIFont.BoldSystemFontOfSize (17);
+			UIFont font = UIFont.BoldSystemFontOfSize (17).Scalable();
 			string c = Caption;
 			// ensure the (single-line) Value will be rendered inside the cell
 			if (String.IsNullOrEmpty (c) && !String.IsNullOrEmpty (Value))
@@ -1879,7 +1878,7 @@ namespace MonoTouch.Dialog
 		bool isPassword, becomeResponder;
 		UITextField entry;
 		string placeholder;
-		static UIFont font = UIFont.BoldSystemFontOfSize (17);
+		static UIFont font = UIFont.BoldSystemFontOfSize (17).Scalable();
 
 		public event EventHandler Changed;
 		public event Func<bool> ShouldReturn;

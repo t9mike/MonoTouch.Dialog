@@ -1,6 +1,6 @@
 using System;
 using System.Drawing;
-
+using MonoTouch.Dialog.Utilities;
 #if __UNIFIED__
 using UIKit;
 using Foundation;
@@ -24,10 +24,10 @@ using CGRect = global::System.Drawing.RectangleF;
 namespace MonoTouch.Dialog {
 
 	public partial class MessageSummaryView : UIView {
-		static UIFont SenderFont = UIFont.BoldSystemFontOfSize (19);
-		static UIFont SubjectFont = UIFont.SystemFontOfSize (14);
-		static UIFont TextFont = UIFont.SystemFontOfSize (13);
-		static UIFont CountFont = UIFont.BoldSystemFontOfSize (13);
+		static UIFont SenderFont = UIFont.BoldSystemFontOfSize (19).Scalable();
+		static UIFont SubjectFont = UIFont.SystemFontOfSize (14).Scalable();
+		static UIFont TextFont = UIFont.SystemFontOfSize (13).Scalable();
+		static UIFont CountFont = UIFont.BoldSystemFontOfSize (13).Scalable();
 		public string Sender { get; private set; }
 		public string Body { get; private set; }
 		public string Subject { get; private set; }

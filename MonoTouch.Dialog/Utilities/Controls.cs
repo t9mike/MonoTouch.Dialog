@@ -75,7 +75,7 @@ namespace MonoTouch.Dialog
 		public virtual void CreateViews ()
 		{
 			LastUpdateLabel = new UILabel (){
-				Font = UIFont.SystemFontOfSize (13f),
+				Font = UIFont.SystemFontOfSize (13f).Scalable(),
 				TextColor = new UIColor (0.47f, 0.50f, 0.57f, 1),
 				ShadowColor = UIColor.White, 
 				ShadowOffset = new CGSize (0, 1),
@@ -87,7 +87,7 @@ namespace MonoTouch.Dialog
 			AddSubview (LastUpdateLabel);
 			
 			StatusLabel = new UILabel (){
-				Font = UIFont.BoldSystemFontOfSize (14),
+				Font = UIFont.BoldSystemFontOfSize (14).Scalable(),
 				TextColor = new UIColor (0.47f, 0.50f, 0.57f, 1),
 				ShadowColor = LastUpdateLabel.ShadowColor,
 				ShadowOffset = new CGSize (0, 1),

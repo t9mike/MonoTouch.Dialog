@@ -12,7 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-
+using MonoTouch.Dialog.Utilities;
 #if __UNIFIED__
 using Foundation;
 using UIKit;
@@ -695,8 +695,8 @@ namespace MonoTouch.Dialog
 			base.ViewWillAppear (animated);
 			if (AutoHideSearch){
 				if (enableSearch){
-					if (TableView.ContentOffset.Y < 44)
-						TableView.ContentOffset = new CGPoint (0, 44);
+					if (TableView.ContentOffset.Y < 44f.Scaled())
+						TableView.ContentOffset = new CGPoint (0, 44f.Scaled());
 				}
 			}
 			if (root == null)

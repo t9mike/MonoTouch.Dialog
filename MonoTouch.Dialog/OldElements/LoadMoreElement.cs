@@ -5,7 +5,7 @@
 using System;
 using System.Drawing;
 using System.Threading;
-
+using MonoTouch.Dialog.Utilities;
 #if __UNIFIED__
 using CoreFoundation;
 using Foundation;
@@ -47,7 +47,7 @@ namespace MonoTouch.Dialog
 		{
 		}
 		
-		public LoadMoreElement (string normalCaption, string loadingCaption, Action<LoadMoreElement> tapped) : this (normalCaption, loadingCaption, tapped, UIFont.BoldSystemFontOfSize (16), DialogViewController.TextColor)
+		public LoadMoreElement (string normalCaption, string loadingCaption, Action<LoadMoreElement> tapped) : this (normalCaption, loadingCaption, tapped, UIFont.BoldSystemFontOfSize (16).Scalable(), DialogViewController.TextColor)
 		{
 		}
 		
@@ -100,7 +100,7 @@ namespace MonoTouch.Dialog
 			}
 			caption.BackgroundColor = UIColor.Clear;
 			caption.TextColor = TextColor ?? DialogViewController.TextColor;
-			caption.Font = Font ?? UIFont.BoldSystemFontOfSize (16);
+			caption.Font = Font ?? UIFont.BoldSystemFontOfSize (16).Scalable();
 			caption.TextAlignment = Alignment;
 			Layout (cell, activityIndicator, caption);
 			return cell;

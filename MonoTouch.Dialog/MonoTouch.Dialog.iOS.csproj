@@ -29,7 +29,8 @@
     <MtouchTlsProvider>Default</MtouchTlsProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType></DebugType>
+    <DebugType>
+    </DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <DefineConstants>XAMCORE_2_0</DefineConstants>
@@ -78,6 +79,7 @@
     <Compile Include="DialogViewController.cs" />
     <Compile Include="Elements.cs" />
     <Compile Include="IBackButtonCaption.cs" />
+    <Compile Include="Utilities\MiscExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Images\arrow.png" />
