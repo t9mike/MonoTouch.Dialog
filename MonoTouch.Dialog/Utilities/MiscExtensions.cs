@@ -3,7 +3,7 @@ using UIKit;
 
 namespace MonoTouch.Dialog.Utilities
 {
-    public static class MiscExtensions
+    internal static class MiscExtensions
     {
         public static UIFont Scalable(this UIFont font)
         { 
