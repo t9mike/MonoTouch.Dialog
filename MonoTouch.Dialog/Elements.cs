@@ -917,6 +917,8 @@ namespace MonoTouch.Dialog
 		public UITextAlignment Alignment = UITextAlignment.Left;
         public UITableViewCellAccessory Accessory = UITableViewCellAccessory.None;
         public string Value;
+		public UIFont FontCaption = StyledStringElement.DefaultCaptionFont;
+		public UIFont FontDetail = StyledStringElement.DefaultCaptionFont;
 		public bool DeselectAfterTapHandled = true;
 		
 		public StringElement (string caption) : base (caption) {}
@@ -952,14 +954,14 @@ namespace MonoTouch.Dialog
             }
 			cell.Accessory = Accessory;
 			cell.TextLabel.Text = Caption;
-            cell.TextLabel.Font = StyledStringElement.DefaultCaptionFont;
+            cell.TextLabel.Font = FontCaption;
             cell.TextLabel.TextAlignment = Alignment;
             cell.TextLabel.TextColor = DialogViewController.TextColor;
 			
 			// The check is needed because the cell might have been recycled.
 			if (cell.DetailTextLabel != null)
             {
-                cell.DetailTextLabel.Font = StyledStringElement.DefaultCaptionFont;
+                cell.DetailTextLabel.Font = FontDetail;
                 cell.DetailTextLabel.Text = Value == null ? "" : Value;
             }
 
