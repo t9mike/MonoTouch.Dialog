@@ -451,8 +451,11 @@ namespace MonoTouch.Dialog
             public override void WillDisplayFooterView(UITableView tableView, UIView footerView, nint section)
             {
                 var view = (UITableViewHeaderFooterView)footerView;
-                view.BackgroundView.BackgroundColor = UIColor.Clear;
-                view.TextLabel.TextColor = TextColorFooter;
+				if (view.BackgroundView != null)
+                {
+					view.BackgroundView.BackgroundColor = UIColor.Clear;
+				}
+				view.TextLabel.TextColor = TextColorFooter;
                 if (TextFontFooter != null)
                     view.TextLabel.Font = TextFontFooter;
             }
