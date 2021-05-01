@@ -3015,6 +3015,7 @@ namespace MonoTouch.Dialog
 		public bool UnevenRows;
 		public Func<RootElement, UIViewController> createOnSelected;
 		public UITableView TableView;
+		public UIView Accessory_View;
 		
 		// This is used to indicate that we need the DVC to dispatch calls to
 		// WillDisplayCell so we can prepare the color of the cell before 
@@ -3412,8 +3413,9 @@ namespace MonoTouch.Dialog
 					var s = Sections [summarySection];
 					if (summaryElement < s.Elements.Count && cell.DetailTextLabel != null)
 						cell.DetailTextLabel.Text = s.Elements [summaryElement].Summary ();
-			} 
+			}
 		le:
+			cell.AccessoryView = Accessory_View;
 			cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
 			cell.BackgroundColor = UIColor.Clear;
 			

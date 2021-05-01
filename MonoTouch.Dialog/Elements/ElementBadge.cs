@@ -98,6 +98,7 @@ namespace MonoTouch.Dialog
 				};
 			}
 			cell.Accessory = Accessory;
+			cell.BackgroundColor = UIColor.Clear;
 			var tl = cell.TextLabel;
 			tl.Text = Caption;
 			tl.Font = Font;
