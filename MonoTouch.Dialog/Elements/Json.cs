@@ -162,7 +162,25 @@ namespace MonoTouch.Dialog {
 				}
 				var alertController = UIAlertController.Create ("Error", "Unable to download data", UIAlertControllerStyle.Alert);
 				alertController.AddAction (UIAlertAction.Create ("Ok", UIAlertActionStyle.Default, (obj) => { }));
-				UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController (alertController, true, () => { });
+				// iOS 27 returns null from UIApplication.KeyWindow under the scene
+				// lifecycle; resolve via ConnectedScenes there. iOS 26 and earlier
+				// keep the old KeyWindow path (the scene lookup misbehaves there).
+				UIWindow key_window = null;
+				if (UIDevice.CurrentDevice.CheckSystemVersion (27, 0))
+				{
+					foreach (var scene in UIApplication.SharedApplication.ConnectedScenes)
+					{
+						if (scene is UIWindowScene window_scene)
+						{
+							foreach (var w in window_scene.Windows)
+							{
+								if (w.IsKeyWindow) { key_window = w; break; }
+							}
+						}
+						if (key_window != null) break;
+					}
+				}
+				(key_window ?? UIApplication.SharedApplication.KeyWindow)?.RootViewController?.PresentViewController (alertController, true, () => { });
 			}));
 		}
 
